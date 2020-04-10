@@ -30,14 +30,14 @@
 
         android:text="@string/add_books"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/remove_books"
+        app:layout_constraintBottom_toTopOf="@+id/delete_book"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/view_reserved_or_checked_out_books_librarian_menu"
+        android:id="@+id/delete_book"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"

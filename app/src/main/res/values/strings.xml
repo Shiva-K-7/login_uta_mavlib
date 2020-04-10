@@ -37,6 +37,12 @@
     <string name="category">Category</string>
     <string name="total">Total</string>
     <string name="delete_book">Delete Book</string>
+    <string name="reserved_books">Reserved Books</string>
+    <string name="checkedout_books">Checkedout Books</string>
+    <string name="search_results">Search Results</string>
+    <string name="view">View</string>
+    <string name="reserve_book">Reserve Book</string>
+
 
 
 </resources>

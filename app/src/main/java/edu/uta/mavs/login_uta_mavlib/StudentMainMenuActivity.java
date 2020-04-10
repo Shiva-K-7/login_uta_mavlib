@@ -33,7 +33,7 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         view_res_or_cout_books.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i3=new Intent(StudentMainMenuActivity.this,CheckoutBooks.class);
+                Intent i3=new Intent(StudentMainMenuActivity.this,ReservedBooks.class);
                 startActivity(i3);
                 //setContentView(R.layout.about);
             }

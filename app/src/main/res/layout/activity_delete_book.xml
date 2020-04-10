@@ -45,7 +45,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="143dp"
         android:layout_marginBottom="456dp"
-        android:text="@string/checkout_books"
+        android:text="@string/delete_book"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

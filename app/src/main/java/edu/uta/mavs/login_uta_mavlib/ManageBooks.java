@@ -15,7 +15,7 @@ public class ManageBooks extends AppCompatActivity {
         setContentView(R.layout.activity_manage_books);
 
         final Button add_book = findViewById(R.id.add_books);
-        final Button remove_book = findViewById(R.id.remove_books);
+        final Button remove_book = findViewById(R.id.delete_book);
 
         add_book.setOnClickListener(new View.OnClickListener(){
             @Override
