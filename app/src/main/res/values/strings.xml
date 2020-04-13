@@ -42,7 +42,8 @@
     <string name="search_results">Search Results</string>
     <string name="view">View</string>
     <string name="reserve_book">Reserve Book</string>
-
+    <string name="quantity">Quantity</string>
+    <string name="notification">Notification</string>
 
 
 </resources>

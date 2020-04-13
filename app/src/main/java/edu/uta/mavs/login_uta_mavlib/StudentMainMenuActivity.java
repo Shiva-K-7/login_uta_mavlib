@@ -18,6 +18,7 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         final Button search_books = findViewById(R.id.search_books_librarian_menu);
         final Button view_res_or_cout_books = findViewById(R.id.view_reserved_or_checked_out_books_librarian_menu);
         final Button about = findViewById(R.id.about);
+        final Button notification = findViewById(R.id.notification);
 
 
 
@@ -26,7 +27,6 @@ public class StudentMainMenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i2=new Intent(StudentMainMenuActivity.this,SearchBooks.class);
                 startActivity(i2);
-                //setContentView(R.layout.activity_search_books);
             }
         });
 
@@ -47,5 +47,14 @@ public class StudentMainMenuActivity extends AppCompatActivity {
                 //setContentView(R.layout.about);
             }
         });
+
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationGenerator.openActivityNotification(getApplicationContext());
+
+            }
+        });
+
     }
 }
