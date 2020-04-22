@@ -102,7 +102,7 @@ public class AddBook extends AppCompatActivity {
                 Book.put("title", TITLE);
                 Book.put("author", AUTHOR);
                 Book.put("category", CATEGORY);
-                Book.put("total", TOTAL);
+                Book.put("total", Integer.parseInt(TOTAL));
                 Book.put("numIssued",0);
                 Book.put("numReserved",0);
 

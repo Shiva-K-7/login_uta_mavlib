@@ -57,9 +57,10 @@ public class RegisterUser extends AppCompatActivity {
                 final String email = Email.getText().toString().trim();
                 final String password = Password.getText().toString().trim();
                 final String cp = Password.getText().toString().trim();
+
                 if(fAuth.getCurrentUser()!=null){
-                    Toast.makeText(RegisterUser.this, "User email already exist", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    Toast.makeText(RegisterUser.this, "You are logged in already!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
                     finish();
                 }
 
