@@ -145,7 +145,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser currentUser) {
-
+        Intent i = new Intent(LoginActivity.this, LibrarianMenu.class);
+        startActivity(i);
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
