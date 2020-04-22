@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "560061236776",
+    "firebase_url": "https://mavlib.firebaseio.com",
+    "project_id": "mavlib",
+    "storage_bucket": "mavlib.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560061236776:android:fb76f541990b9ef48ed71d",
+        "android_client_info": {
+          "package_name": "edu.uta.mavs.login_uta_mavlib"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560061236776-8v53k7ut57s5f7clbj6eimskm2vq5ksk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlcHNipP5AFtnLgTi7Q-E2MG0RrKIkKhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560061236776-8v53k7ut57s5f7clbj6eimskm2vq5ksk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,6 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import edu.uta.mavs.login_uta_mavlib.LibrarianMenu;
 import edu.uta.mavs.login_uta_mavlib.R;
 import edu.uta.mavs.login_uta_mavlib.RegisterUser;
@@ -28,14 +31,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private LoginViewModel loginViewModel;
-
+    private FirebaseAuth mAuth;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-
+        mAuth = FirebaseAuth.getInstance();
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
@@ -131,6 +134,18 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());*/
             }
         });
+    }
+    @Override
+
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
