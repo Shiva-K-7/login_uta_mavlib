@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
 
@@ -37,10 +39,7 @@ public class RegisterUser extends AppCompatActivity {
         final ProgressBar loading = findViewById(R.id.loading);
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
 
-        if(fAuth.getCurrentUser()!=null){
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
+
 
         register.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -51,6 +50,12 @@ public class RegisterUser extends AppCompatActivity {
                 String email = Email.getText().toString().trim();
                 String password = Password.getText().toString().trim();
                 String cp = Password.getText().toString().trim();
+
+                if(fAuth.getCurrentUser()!=null){
+                    Toast.makeText(RegisterUser.this, "User email already exist", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    finish();
+                }
 
                 if(TextUtils.isEmpty(fn))
                 {
@@ -107,9 +112,7 @@ public class RegisterUser extends AppCompatActivity {
                         }
                     }
                 });
-                //Intent i2=new Intent(RegisterUser.this, StudentMainMenuActivity.class);
-                //startActivity(i2);
-                //setContentView(R.layout.activity_search_books);
+
             }
         });
     }

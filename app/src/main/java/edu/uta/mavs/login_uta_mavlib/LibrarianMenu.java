@@ -6,8 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
 
 public class LibrarianMenu extends AppCompatActivity {
+
+    @Override
+    public void onBackPressed() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        Toast.makeText(getApplicationContext(), "you have been logged out.\n Login again.", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
