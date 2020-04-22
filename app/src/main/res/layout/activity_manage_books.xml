@@ -10,12 +10,14 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:gravity="center"
         android:minHeight="?actionBarSize"
         android:padding="@dimen/appbar_padding"
         android:text="@string/manage_books"
         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+        app:layout_constraintBottom_toTopOf="@+id/add_books"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -23,12 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
         android:clickable="true"
-
         android:elevation="5dp"
+
         android:text="@string/add_books"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/remove_books"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:visibility="visible" />
 
@@ -37,14 +41,16 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="476dp"
         android:clickable="true"
-
         android:elevation="5dp"
+
         android:text="@string/remove_books"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_books"
-        tools:layout_editor_absoluteX="-28dp"
         tools:visibility="visible" />
 
 
