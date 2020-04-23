@@ -56,7 +56,7 @@ public class RegisterUser extends AppCompatActivity {
                 final String sid = StudentID.getText().toString().trim();
                 final String email = Email.getText().toString().trim();
                 final String password = Password.getText().toString().trim();
-                final String cp = Password.getText().toString().trim();
+                final String confirmPass = ConfirmPassword.getText().toString().trim();
 
                 if(fAuth.getCurrentUser()!=null){
                     Toast.makeText(RegisterUser.this, "You are logged in already!", Toast.LENGTH_SHORT).show();
@@ -91,7 +91,7 @@ public class RegisterUser extends AppCompatActivity {
                     Password.setError("password is required.");
                     return;
                 }
-                if(TextUtils.isEmpty(cp))
+                if(TextUtils.isEmpty(confirmPass))
                 {
                     ConfirmPassword.setError("confirm password!");
                     return;
@@ -101,12 +101,12 @@ public class RegisterUser extends AppCompatActivity {
                     Password.setError("Password length should be at least 8.");
                     return;
                 }
-             /*   if(cp.equals(password)){}
-                else
+
+                if( !confirmPass.equals( password ) )
                 {
-                    ConfirmPassword.setError("Password entered does not match with the above password.");
+                    ConfirmPassword.setError("Passwords do not match.");
                     return;
-                }*/
+                }
 
                 loading.setVisibility(View.VISIBLE);
                 fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
