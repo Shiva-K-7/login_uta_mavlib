@@ -45,8 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-
-
         new_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,16 +75,33 @@ public class LoginActivity extends AppCompatActivity {
                     password.setError("Password length should be at least 8.");
                     return;
                 }
-
-                mAuth.signInWithEmailAndPassword(em,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                if(em.equals("librarian1@mavs.uta.edu")||em.equals("librarian2@mavs.uta.edu"))
+                {
+                    mAuth.signInWithEmailAndPassword(em,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), LibrarianMenu.class));
                         }
+                        }
+                    });
+                }
+                else
+                    {
+                        mAuth.signInWithEmailAndPassword(em,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful())
+                        {
+                            Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
+                        }
+                        }
+                        });
                     }
-                });
+
+
                 //Intent i = new Intent(LoginActivity.this, LibrarianMenu.class);
                 //startActivity(i);
                 //setContentView(R.layout.activity_librarian_menu);

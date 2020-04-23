@@ -37,7 +37,8 @@ public class DeleteBook extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String ISBN = isbn.getText().toString().trim();
-                String q = quantity.getText().toString().trim();
+                final String q = quantity.getText().toString().trim();
+                final String key_total = "total";
 
                 if(TextUtils.isEmpty(ISBN))
                 {
@@ -46,25 +47,71 @@ public class DeleteBook extends AppCompatActivity {
                 }
 
                 b.setIsbn(ISBN);
+                b.setNumber(q);
 
-        database.collection("Book").document(b.getIsbn())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(DeleteBook.this, "Book is deleted from the Database", Toast.LENGTH_SHORT).show();
-                        Log.d("TAG", "Book successfully deleted!");
+                //trying to change the quantity if it is less than the number of books already existing.
+                /*
+                database.collection("Book").document(b.getIsbn()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshots)
+                {
+                    if(documentSnapshots.exists())
+                    {
+                        String total = documentSnapshots.getString(key_total);
+                        if(total == q)
+                        {
+                            database.collection("Book").document(b.getIsbn())
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(DeleteBook.this, "Book is deleted from the Database", Toast.LENGTH_SHORT).show();
+                                            Log.d("TAG", "Book successfully deleted!");
 
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            String error = e.getMessage();
+                                            Toast.makeText(DeleteBook.this,"Error"+error,Toast.LENGTH_SHORT).show();
+                                            Log.w("TAG", "Error deleting document", e);
+                                        }
+                                    });
+                        }
                     }
-                })
+                    else {
+                        Toast.makeText(DeleteBook.this, "Book does not exist", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "Book does not exist!");
+                    }
+
+                }
+                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        String error = e.getMessage();
-                        Toast.makeText(DeleteBook.this,"Error"+error,Toast.LENGTH_SHORT).show();
-                        Log.w("TAG", "Error deleting document", e);
+
                     }
-                });
+                });*/
+
+                database.collection("Book").document(b.getIsbn())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(DeleteBook.this, "Book is deleted from the Database", Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", "Book successfully deleted!");
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                String error = e.getMessage();
+                                Toast.makeText(DeleteBook.this,"Error"+error,Toast.LENGTH_SHORT).show();
+                                Log.w("TAG", "Error deleting document", e);
+                            }
+                        });
             }
         });
 

@@ -25,7 +25,7 @@
     <TableLayout
         android:id="@+id/table_search_result"
         android:layout_width="match_parent"
-        android:layout_height="673dp"
+        android:layout_height="327dp"
         android:layout_marginTop="1dp"
         android:elevation="5dp"
         android:fadeScrollbars="true"
@@ -36,7 +36,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintVertical_bias="0.0">
 
         <TableRow
             android:layout_width="match_parent"
@@ -279,5 +280,18 @@
 
 
     </TableLayout>
+
+    <ListView
+        android:id="@+id/list_books"
+        android:layout_width="match_parent"
+        android:layout_height="344dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/table_search_result" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
