@@ -1,54 +1,73 @@
 package edu.uta.mavs.login_uta_mavlib;
 
 public class Book {
-    private String isbn;
-    private String title;
-    private String author;
-    private String category;
-    private String total;
+    private String mIsbn;
+    private String mTitle;
+    private String mAuthor;
+    private String mCategory;
+    private int mTotal;
+    private int mNumIssued;
+    private int mNumReserved;
 
-    public String getIsbn() {
-        return isbn;
+
+    public Book(String aIsbn, String aTitle, String aAuthor, String aCategory, int aTotal){
+        mIsbn = aIsbn;
+        mTitle = aTitle;
+        mAuthor = aAuthor;
+        mCategory = aCategory;
+        mTotal = aTotal;
+        mNumIssued = 0;
+        mNumReserved = 0;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public String getIsbn() {
+        return mIsbn;
     }
 
     public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        return mTitle;
     }
 
     public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
+        return mAuthor;
     }
 
     public String getCategory() {
-        return category;
+        return mCategory;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public int getTotal() { return mTotal; }
+
+    public int getIssued() { return mNumIssued; }
+
+    public int getReserved() { return mNumReserved; }
+
+    public boolean getAvailability() {
+        if (mTotal - mNumReserved - mNumIssued > 0)
+            return true;
+        else
+            return false;
     }
 
-    public String getTotal() {
-        return total;
+    public void increaseAvailabilityCount(boolean aCheckIn, boolean aUnReserve) {
+        if (aCheckIn) {
+            mNumIssued--;
+            if (mNumIssued < 0)
+                mNumIssued = 0;
+        }
+        if (aUnReserve) {
+            mNumReserved --;
+            if (mNumReserved < 0)
+                mNumReserved = 0;
+        }
     }
 
-    public void setTotal(String total) {
-        this.total = total;
+    public void reduceAvailabilityCount(boolean aCheckOut, boolean aReserve) {
+        if (aCheckOut) {
+            mNumIssued++;
+        }
+        if (aReserve) {
+            mNumReserved ++;
+        }
     }
-
-    public Book(){
-
-    }
-
 }

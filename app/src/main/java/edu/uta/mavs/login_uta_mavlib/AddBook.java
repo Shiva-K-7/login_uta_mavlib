@@ -45,7 +45,8 @@ public class AddBook extends AppCompatActivity {
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
 
         DR= FirebaseDatabase.getInstance().getReference().child("Book");
-        book = new Book();
+        //book = new Book();
+        //TODO: create book object and send to DBMgr
 
         addbook.setOnClickListener(new View.OnClickListener()
         {
