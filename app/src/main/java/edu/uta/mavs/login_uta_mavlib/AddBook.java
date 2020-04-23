@@ -16,8 +16,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -25,7 +23,7 @@ import java.util.Map;
 
 public class AddBook extends AppCompatActivity {
 
-    Book book;
+    Book b;
     DatabaseReference DR;
 
     @Override
@@ -44,8 +42,7 @@ public class AddBook extends AppCompatActivity {
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-        DR= FirebaseDatabase.getInstance().getReference().child("Book");
-        book = new Book();
+        b = new Book();
 
         addbook.setOnClickListener(new View.OnClickListener()
         {
@@ -84,17 +81,7 @@ public class AddBook extends AppCompatActivity {
                     return;
                 }
 
-                /*(book.setIsbn(ISBN);
-                book.setTitle(TITLE);
-                book.setAuthor(AUTHOR);
-                book.setCategory(CATEGORY);
-                book.setTotal(TOTAL);
-
-                DR.push().setValue(book);
-
-                Toast.makeText(AddBook.this,"book added successfully",Toast.LENGTH_SHORT).show();
-*/
-
+                b.setIsbn(ISBN);
 
                 Map<String,Object> Book = new HashMap<>();
 
@@ -106,11 +93,12 @@ public class AddBook extends AppCompatActivity {
                 Book.put("numIssued",0);
                 Book.put("numReserved",0);
 
-                database.collection("Book").add(Book).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                database.collection("Book").document(b.getIsbn()).set(Book).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         Toast.makeText(AddBook.this, "Book is added to the Database", Toast.LENGTH_SHORT).show();
                         Log.d("TAG" ,"onSuccess: Book is added to DB");
+                        
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -119,8 +107,6 @@ public class AddBook extends AppCompatActivity {
                         Toast.makeText(AddBook.this,"Error"+error,Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
         });
     }

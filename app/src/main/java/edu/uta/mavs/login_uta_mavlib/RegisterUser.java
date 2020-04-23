@@ -59,7 +59,7 @@ public class RegisterUser extends AppCompatActivity {
                 final String cp = Password.getText().toString().trim();
 
                 if(fAuth.getCurrentUser()!=null){
-                    Toast.makeText(RegisterUser.this, "You are logged in already!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterUser.this, "You are logged in!!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
                     finish();
                 }
@@ -131,8 +131,6 @@ public class RegisterUser extends AppCompatActivity {
                                     Log.d("TAG" ,"onSuccess: User profile is created for "+userID);
                                 }
                             });
-
-
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }
                         else{

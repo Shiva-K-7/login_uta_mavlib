@@ -37,11 +37,14 @@ public class LoginActivity extends AppCompatActivity {
         final Button new_user = findViewById(R.id.new_user);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
+
         if(mAuth.getCurrentUser()!=null){
             Toast.makeText(LoginActivity.this, "You are logged in already!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
             finish();
         }
+
+
 
 
         new_user.setOnClickListener(new View.OnClickListener() {
