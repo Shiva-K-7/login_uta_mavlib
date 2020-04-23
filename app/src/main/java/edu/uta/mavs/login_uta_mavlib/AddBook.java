@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class AddBook extends AppCompatActivity {
 
-    Book b;
+    Book1 b;
     DatabaseReference DR;
 
     @Override
@@ -42,7 +42,7 @@ public class AddBook extends AppCompatActivity {
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-        b = new Book();
+        b = new Book1();
 
         addbook.setOnClickListener(new View.OnClickListener()
         {
@@ -98,7 +98,7 @@ public class AddBook extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(AddBook.this, "Book is added to the Database", Toast.LENGTH_SHORT).show();
                         Log.d("TAG" ,"onSuccess: Book is added to DB");
-                        
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
