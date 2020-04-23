@@ -24,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
 
@@ -57,7 +56,7 @@ public class RegisterUser extends AppCompatActivity {
                 final String sid = StudentID.getText().toString().trim();
                 final String email = Email.getText().toString().trim();
                 final String password = Password.getText().toString().trim();
-                final String cp = ConfirmPassword.getText().toString().trim();
+                final String cp = Password.getText().toString().trim();
 
                 if(fAuth.getCurrentUser()!=null){
                     Toast.makeText(RegisterUser.this, "You are logged in already!", Toast.LENGTH_SHORT).show();
@@ -102,12 +101,12 @@ public class RegisterUser extends AppCompatActivity {
                     Password.setError("Password length should be at least 8.");
                     return;
                 }
-                if(cp.equals(password)){}
+             /*   if(cp.equals(password)){}
                 else
                 {
                     ConfirmPassword.setError("Password entered does not match with the above password.");
                     return;
-                }
+                }*/
 
                 loading.setVisibility(View.VISIBLE);
                 fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -137,7 +136,7 @@ public class RegisterUser extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }
                         else{
-                            Toast.makeText(RegisterUser.this, "Error..!"+ Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterUser.this, "Error..!"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
