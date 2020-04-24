@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
 
-public class RegisterUser extends AppCompatActivity {
+public class RegisterController extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class RegisterUser extends AppCompatActivity {
                 DBMgr dbMgr = DBMgr.getInstance();
 
                 //todo - is this check needed?
-//                if (dbMgr.getLoggedInStatus(RegisterUser.this)) {
+//                if (dbMgr.getLoggedInStatus(RegisterController.this)) {
 //                    startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
 //                    finish();
 //                }
@@ -99,7 +99,7 @@ public class RegisterUser extends AppCompatActivity {
 
                 loading.setVisibility(View.VISIBLE);
 
-                dbMgr.storeStudent(newStudent, RegisterUser.this);
+                dbMgr.storeStudent(newStudent, RegisterController.this);
 
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 

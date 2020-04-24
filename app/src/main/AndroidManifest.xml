@@ -14,7 +14,7 @@
         <activity android:name=".ReservedBooks" />
         <activity android:name=".DeleteBook" />
         <activity android:name=".AddBook" />
-        <activity android:name=".RegisterUser" />
+        <activity android:name=".RegisterController" />
         <activity android:name=".AboutUs" />
         <activity android:name=".ManageBooks" />
         <activity android:name=".CheckinBooks" />

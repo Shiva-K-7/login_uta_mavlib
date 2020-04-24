@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uta.mavs.login_uta_mavlib.LibrarianMenu;
 import edu.uta.mavs.login_uta_mavlib.R;
-import edu.uta.mavs.login_uta_mavlib.RegisterUser;
+import edu.uta.mavs.login_uta_mavlib.RegisterController;
 import edu.uta.mavs.login_uta_mavlib.StudentMainMenuActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         new_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this, RegisterUser.class);
+                Intent i = new Intent(LoginActivity.this, RegisterController.class);
                 startActivity(i);
                 //setContentView(R.layout.activity_registration);
             }
