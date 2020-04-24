@@ -4,26 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
 
@@ -44,8 +30,7 @@ public class RegisterUser extends AppCompatActivity {
         final EditText Password=findViewById(R.id.password);
         final EditText ConfirmPassword=findViewById(R.id.confirm_password);
         final ProgressBar loading = findViewById(R.id.loading);
-        final FirebaseAuth fAuth = FirebaseAuth.getInstance();
-        final FirebaseFirestore database = FirebaseFirestore.getInstance();
+
 
 
         register.setOnClickListener(new View.OnClickListener(){
@@ -56,13 +41,15 @@ public class RegisterUser extends AppCompatActivity {
                 final String sid = StudentID.getText().toString().trim();
                 final String email = Email.getText().toString().trim();
                 final String password = Password.getText().toString().trim();
-                final String cp = Password.getText().toString().trim();
+                final String cp = ConfirmPassword.getText().toString().trim();
 
-                if(fAuth.getCurrentUser()!=null){
-                    Toast.makeText(RegisterUser.this, "You are logged in!!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
-                    finish();
-                }
+                DBMgr dbMgr = DBMgr.getInstance();
+
+                //todo - is this check needed?
+//                if (dbMgr.getLoggedInStatus(RegisterUser.this)) {
+//                    startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
+//                    finish();
+//                }
 
                 if(TextUtils.isEmpty(fn))
                 {
@@ -101,43 +88,21 @@ public class RegisterUser extends AppCompatActivity {
                     Password.setError("Password length should be at least 8.");
                     return;
                 }
-             /*   if(cp.equals(password)){}
-                else
+                if(!cp.equals(password))
                 {
                     ConfirmPassword.setError("Password entered does not match with the above password.");
                     return;
-                }*/
+                }
+
+                Student newStudent = new Student(sid, fn, ln, email, password);
+
 
                 loading.setVisibility(View.VISIBLE);
-                fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
-                    {
-                        if(task.isSuccessful()){
-                            Toast.makeText(RegisterUser.this, "User Created", Toast.LENGTH_SHORT).show();
-                            final String userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference dr = database.collection("Student").document(userID);
-                            Map<String,Object> user = new HashMap<>();
 
-                            user.put("userId", sid);
-                            user.put("userFName", fn);
-                            user.put("userLName", ln);
-                            user.put("userEmail", email);
-                            user.put("userPassword", password);
+                dbMgr.storeStudent(newStudent, RegisterUser.this);
 
-                            dr.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d("TAG" ,"onSuccess: User profile is created for "+userID);
-                                }
-                            });
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                        }
-                        else{
-                            Toast.makeText(RegisterUser.this, "Error..!"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
             }
         });
     }

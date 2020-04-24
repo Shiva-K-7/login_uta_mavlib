@@ -14,6 +14,8 @@ public class Reservation {
         mAvailableDate = LocalDate.now();
     }
 
+    //todo: constructor from database
+
     public String getSid() { return mUserId; }
 
     public String getIsbn() { return mIsbn; }

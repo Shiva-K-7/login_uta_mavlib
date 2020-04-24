@@ -17,6 +17,8 @@ public class Checkout {
         mDueDate = mIssueDate.plusWeeks(1);
     }
 
+    //todo constructor from database
+
     public String getSId() { return mUserId; }
 
     public String getIsbn() { return mIsbn; }
