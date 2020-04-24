@@ -10,14 +10,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
+import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
 
 public class LibrarianMenu extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
         FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        startActivity(new Intent(getApplicationContext(), LoginController.class));
         Toast.makeText(getApplicationContext(), "you have been logged out.\n Login again.", Toast.LENGTH_SHORT).show();
         finish();
     }

@@ -1,6 +1,7 @@
 package edu.uta.mavs.login_uta_mavlib;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,13 +13,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-
-
 
 
 public class DBMgr {
@@ -39,13 +40,47 @@ public class DBMgr {
         return single_instance;
     }
 
-    public boolean getLoggedInStatus(final Context aContext){
-        if(fAuth.getCurrentUser()!=null){
+    public void getLoggedInStatus(final Context aContext){
+        FirebaseUser fUser = fAuth.getCurrentUser();
+
+        if(fUser!=null){
+            String lUid = fUser.getUid();
+            DocumentReference docIdRef = database.collection("Librarian").document(lUid);
+            docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            aContext.startActivity(new Intent(aContext, LibrarianMenu.class));
+                        } else {
+                            aContext.startActivity(new Intent(aContext, StudentMainMenuActivity.class));
+                        }
+                    } else {
+                        Log.d("DBMgr", "Failed with: ", task.getException());
+                    }
+                }
+            });
             Toast.makeText(aContext, "You are logged in!!", Toast.LENGTH_SHORT).show();
-            return true;
         }
-        return false;
     }
+
+
+    public void login(final String aEmail, final String aPass, final Context aContext){
+        fAuth.signInWithEmailAndPassword(aEmail,aPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(aContext, "Login Successful!", Toast.LENGTH_SHORT).show();
+                    getLoggedInStatus(aContext);
+                }
+                else{
+                    Toast.makeText(aContext, "Login Failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     public void storeStudent(final Student aNewStudent, final Context aContext){
         fAuth.createUserWithEmailAndPassword(aNewStudent.getEmail(),aNewStudent.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

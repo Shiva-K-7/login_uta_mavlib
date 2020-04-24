@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import edu.uta.mavs.login_uta_mavlib.ui.login.LoginActivity;
+import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
 
 public class RegisterController extends AppCompatActivity {
 
@@ -44,12 +44,6 @@ public class RegisterController extends AppCompatActivity {
                 final String cp = ConfirmPassword.getText().toString().trim();
 
                 DBMgr dbMgr = DBMgr.getInstance();
-
-                //todo - is this check needed?
-//                if (dbMgr.getLoggedInStatus(RegisterController.this)) {
-//                    startActivity(new Intent(getApplicationContext(), StudentMainMenuActivity.class));
-//                    finish();
-//                }
 
                 if(TextUtils.isEmpty(fn))
                 {
@@ -101,7 +95,7 @@ public class RegisterController extends AppCompatActivity {
 
                 dbMgr.storeStudent(newStudent, RegisterController.this);
 
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginController.class));
 
             }
         });
