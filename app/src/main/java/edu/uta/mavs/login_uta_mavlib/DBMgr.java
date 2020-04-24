@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -78,6 +79,57 @@ public class DBMgr {
     }
 
 
+    public void storeBook(final Book aNewBook, final Context aContext){
+        Map<String,Object> Book = new HashMap<>();
+
+        Book.put("isbn", aNewBook.getIsbn());
+        Book.put("title", aNewBook.getTitle());
+        Book.put("author", aNewBook.getAuthor());
+        Book.put("category", aNewBook.getCategory());
+        Book.put("total", aNewBook.getTotal());
+        Book.put("numIssued",0);
+        Book.put("numReserved",0);
+
+        database.collection("Book").document(aNewBook.getIsbn()).set(Book).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(aContext, "Book is added to the Database", Toast.LENGTH_SHORT).show();
+                Log.d("TAG" ,"onSuccess: Book is added to DB");
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String error = e.getMessage();
+                Toast.makeText(aContext,"Error"+error,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void deleteBook(final String aIsbn, final Context aContext){
+        //todo will also need to delete all reservation and checkout objects for isbn here
+
+        database.collection("Book").document(aIsbn)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(aContext, "Book is deleted from the Database", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "Book successfully deleted!");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String error = e.getMessage();
+                        Toast.makeText(aContext,"Error"+error,Toast.LENGTH_SHORT).show();
+                        Log.w("TAG", "Error deleting document", e);
+                    }
+                });
+
+    }
 
 
 }
