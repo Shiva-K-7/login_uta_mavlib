@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.uta.mavs.login_uta_mavlib.DBMgr;
 import edu.uta.mavs.login_uta_mavlib.R;
 import edu.uta.mavs.login_uta_mavlib.RegisterController;
+import edu.uta.mavs.login_uta_mavlib.password_security;
 
 public class LoginController extends AppCompatActivity {
 
@@ -63,7 +64,9 @@ public class LoginController extends AppCompatActivity {
                     return;
                 }
 
-                dbMgr.login(em, pass, LoginController.this);
+                String password_encrypted = password_security.getMD5EncryptedValue(pass);
+
+                dbMgr.login(em, password_encrypted, LoginController.this);
 
             }
         });

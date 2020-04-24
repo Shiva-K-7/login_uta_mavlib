@@ -87,8 +87,8 @@ public class RegisterController extends AppCompatActivity {
                     ConfirmPassword.setError("Password entered does not match with the above password.");
                     return;
                 }
-
-                Student newStudent = new Student(sid, fn, ln, email, password);
+                String password_encrypted = password_security.getMD5EncryptedValue(password);
+                Student newStudent = new Student(sid, fn, ln, email, password_encrypted);
 
 
                 loading.setVisibility(View.VISIBLE);
