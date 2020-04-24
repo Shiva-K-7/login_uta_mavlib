@@ -1,59 +1,63 @@
 package edu.uta.mavs.login_uta_mavlib;
 
 public class Book {
-    private String mIsbn;
-    private String mTitle;
-    private String mAuthor;
-    private String mCategory;
-    private int mTotal;
-    private int mNumIssued;
-    private int mNumReserved;
+    private String isbn;
+    private String title;
+    private String author;
+    private String category;
+    private int total;
+    private int numIssued;
+    private int numReserved;
 
+
+    public Book(){
+        //only for firestore
+    }
 
     public Book(String aIsbn, String aTitle, String aAuthor, String aCategory, int aTotal){
-        mIsbn = aIsbn;
-        mTitle = aTitle;
-        mAuthor = aAuthor;
-        mCategory = aCategory;
-        mTotal = aTotal;
-        mNumIssued = 0;
-        mNumReserved = 0;
+        isbn = aIsbn;
+        title = aTitle;
+        author = aAuthor;
+        category = aCategory;
+        total = aTotal;
+        numIssued = 0;
+        numReserved = 0;
     }
 
     public Book(String aIsbn, String aTitle, String aAuthor, String aCategory, int aTotal, int aIssued, int aReserved){
-        mIsbn = aIsbn;
-        mTitle = aTitle;
-        mAuthor = aAuthor;
-        mCategory = aCategory;
-        mTotal = aTotal;
-        mNumIssued = aIssued;
-        mNumReserved = aReserved;
+        isbn = aIsbn;
+        title = aTitle;
+        author = aAuthor;
+        category = aCategory;
+        total = aTotal;
+        numIssued = aIssued;
+        numReserved = aReserved;
     }
 
     public String getIsbn() {
-        return mIsbn;
+        return isbn;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public String getAuthor() {
-        return mAuthor;
+        return author;
     }
 
     public String getCategory() {
-        return mCategory;
+        return category;
     }
 
-    public int getTotal() { return mTotal; }
+    public int getTotal() { return total; }
 
-    public int getIssued() { return mNumIssued; }
+    public int getIssued() { return numIssued; }
 
-    public int getReserved() { return mNumReserved; }
+    public int getReserved() { return numReserved; }
 
-    public boolean getAvailability() {
-        if (mTotal - mNumReserved - mNumIssued > 0)
+    public boolean checkAvailability() {
+        if (total - numReserved - numIssued > 0)
             return true;
         else
             return false;
@@ -61,23 +65,23 @@ public class Book {
 
     public void increaseAvailabilityCount(boolean aCheckIn, boolean aUnReserve) {
         if (aCheckIn) {
-            mNumIssued--;
-            if (mNumIssued < 0)
-                mNumIssued = 0;
+            numIssued--;
+            if (numIssued < 0)
+                numIssued = 0;
         }
         if (aUnReserve) {
-            mNumReserved --;
-            if (mNumReserved < 0)
-                mNumReserved = 0;
+            numReserved--;
+            if (numReserved < 0)
+                numReserved = 0;
         }
     }
 
     public void reduceAvailabilityCount(boolean aCheckOut, boolean aReserve) {
         if (aCheckOut) {
-            mNumIssued++;
+            numIssued++;
         }
         if (aReserve) {
-            mNumReserved ++;
+            numReserved++;
         }
     }
 }

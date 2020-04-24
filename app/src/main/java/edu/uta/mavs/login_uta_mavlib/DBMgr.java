@@ -14,26 +14,38 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.ArrayList;
 
 
 public class DBMgr {
 
     private static DBMgr single_instance = null;
 
+    private static final String TAG = "DBMgr";
+
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
+    private CollectionReference studentDb;
+    private CollectionReference librarianDb;
+    private CollectionReference bookDb;
+    private CollectionReference checkoutDb;
+    private CollectionReference reservationDb;
 
     public DBMgr() {
         fAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
-
+        studentDb = database.collection("Student");
+        librarianDb = database.collection("Librarian");
+        bookDb = database.collection("Book");
+        checkoutDb = database.collection("Checkout");
+        reservationDb = database.collection("Reservation");
     }
 
     //Singleton Database Manager
@@ -48,7 +60,7 @@ public class DBMgr {
 
         if(fUser!=null){
             String lUid = fUser.getUid();
-            DocumentReference docIdRef = database.collection("Librarian").document(lUid);
+            DocumentReference docIdRef = librarianDb.document(lUid);
             docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -60,7 +72,7 @@ public class DBMgr {
                             aContext.startActivity(new Intent(aContext, StudentMenu.class));
                         }
                     } else {
-                        Log.d("DBMgr", "Failed with: ", task.getException());
+                        Log.d(TAG, "Failed with: ", task.getException());
                     }
                 }
             });
@@ -86,23 +98,16 @@ public class DBMgr {
 
 
     public void storeStudent(final Student aNewStudent, final Context aContext){
-        fAuth.createUserWithEmailAndPassword(aNewStudent.getEmail(),aNewStudent.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth.createUserWithEmailAndPassword(aNewStudent.getUserEmail(),aNewStudent.getUserPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
                 if(task.isSuccessful()){
                     Toast.makeText(aContext, "User Created", Toast.LENGTH_SHORT).show();
                     final String userID = fAuth.getCurrentUser().getUid();
-                    DocumentReference dr = database.collection("Student").document(userID);
-                    Map<String,Object> user = new HashMap<>();
+                    DocumentReference dr = studentDb.document(userID);
 
-                    user.put("userId", aNewStudent.getId());
-                    user.put("userFName", aNewStudent.getFName());
-                    user.put("userLName", aNewStudent.getLName());
-                    user.put("userEmail", aNewStudent.getEmail());
-                    user.put("userPassword", aNewStudent.getPassword());
-
-                    dr.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    dr.set(aNewStudent).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("TAG" ,"onSuccess: User profile is created for "+userID);
@@ -124,17 +129,8 @@ public class DBMgr {
 
 
     public void storeBook(final Book aNewBook, final Context aContext){
-        Map<String,Object> Book = new HashMap<>();
-
-        Book.put("isbn", aNewBook.getIsbn());
-        Book.put("title", aNewBook.getTitle());
-        Book.put("author", aNewBook.getAuthor());
-        Book.put("category", aNewBook.getCategory());
-        Book.put("total", aNewBook.getTotal());
-        Book.put("numIssued",0);
-        Book.put("numReserved",0);
-
-        database.collection("Book").document(aNewBook.getIsbn()).set(Book).addOnSuccessListener(new OnSuccessListener<Void>() {
+        bookDb.document(aNewBook.getIsbn()).set(aNewBook)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(aContext, "Book is added to the Database", Toast.LENGTH_SHORT).show();
@@ -153,28 +149,42 @@ public class DBMgr {
 
     public void getBook(final String aIsbn, final OnGetBookListener listener){
         listener.onStart();
-        DocumentReference docIdRef = database.collection("Book").document(aIsbn);
+        DocumentReference docIdRef = bookDb.document(aIsbn);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Book book = new Book(document.get("isbn").toString(),
-                                document.get("title").toString(),
-                                document.get("author").toString(),
-                                document.get("category").toString(),
-                                Integer.parseInt(document.get("total").toString()),
-                                Integer.parseInt(document.get("numIssued").toString()),
-                                Integer.parseInt(document.get("numReserved").toString())
-                        );
+                        Book book = document.toObject(Book.class);
                         listener.onSuccess(book);
                     } else {
                         listener.onFailure();
                     }
                 } else {
-                    Log.d("DBMgr", "Failed with: ", task.getException());
+                    Log.d(TAG, "Failed with: ", task.getException());
                 }
+            }
+        });
+    }
+
+    public void getBooks(String isbn, String title, String author, String category, final OnGetBooksListener listener){
+        listener.onStart();
+        bookDb.whereEqualTo("isbn", isbn).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        ArrayList<Book> books = new ArrayList<Book>();
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            Book book = docSnapshot.toObject(Book.class);
+                            books.add(book);
+                        }
+                        listener.onSuccess(books);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
             }
         });
     }
@@ -183,7 +193,7 @@ public class DBMgr {
     public void deleteBook(final String aIsbn, final Context aContext){
         //todo will also need to delete all reservation and checkout objects for isbn here
 
-        database.collection("Book").document(aIsbn)
+        bookDb.document(aIsbn)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
