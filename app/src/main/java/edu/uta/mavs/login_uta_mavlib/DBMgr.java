@@ -22,16 +22,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 public class DBMgr {
 
     private static DBMgr single_instance = null;
 
-    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
-    private final FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore database;
 
+    public DBMgr() {
+        fAuth = FirebaseAuth.getInstance();
+        database = FirebaseFirestore.getInstance();
 
-
-    public DBMgr() {}
+    }
 
     //Singleton Database Manager
     public static DBMgr getInstance(){
@@ -54,7 +57,7 @@ public class DBMgr {
                         if (document.exists()) {
                             aContext.startActivity(new Intent(aContext, LibrarianMenu.class));
                         } else {
-                            aContext.startActivity(new Intent(aContext, StudentMainMenuActivity.class));
+                            aContext.startActivity(new Intent(aContext, StudentMenu.class));
                         }
                     } else {
                         Log.d("DBMgr", "Failed with: ", task.getException());
@@ -114,6 +117,12 @@ public class DBMgr {
     }
 
 
+    public void getUser(final String userId, final OnGetUserListener listener){
+        listener.onStart();
+
+    }
+
+
     public void storeBook(final Book aNewBook, final Context aContext){
         Map<String,Object> Book = new HashMap<>();
 
@@ -137,6 +146,35 @@ public class DBMgr {
             public void onFailure(@NonNull Exception e) {
                 String error = e.getMessage();
                 Toast.makeText(aContext,"Error"+error,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void getBook(final String aIsbn, final OnGetBookListener listener){
+        listener.onStart();
+        DocumentReference docIdRef = database.collection("Book").document(aIsbn);
+        docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Book book = new Book(document.get("isbn").toString(),
+                                document.get("title").toString(),
+                                document.get("author").toString(),
+                                document.get("category").toString(),
+                                Integer.parseInt(document.get("total").toString()),
+                                Integer.parseInt(document.get("numIssued").toString()),
+                                Integer.parseInt(document.get("numReserved").toString())
+                        );
+                        listener.onSuccess(book);
+                    } else {
+                        listener.onFailure();
+                    }
+                } else {
+                    Log.d("DBMgr", "Failed with: ", task.getException());
+                }
             }
         });
     }

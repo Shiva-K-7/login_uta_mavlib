@@ -45,7 +45,7 @@ public class LibrarianMenu extends AppCompatActivity {
         view_res_or_cout_books.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i2=new Intent(LibrarianMenu.this,CheckoutBooks.class);
+                Intent i2=new Intent(LibrarianMenu.this, CheckoutController.class);
                 startActivity(i2);
             }
         });

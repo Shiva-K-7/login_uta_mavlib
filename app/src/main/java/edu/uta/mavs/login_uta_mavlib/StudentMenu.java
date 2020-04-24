@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
 
-public class StudentMainMenuActivity extends AppCompatActivity {
+public class StudentMenu extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
@@ -36,7 +36,7 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         search_books.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent i2=new Intent(StudentMainMenuActivity.this,SearchBooks.class);
+                Intent i2=new Intent(StudentMenu.this,SearchBooks.class);
                 startActivity(i2);
             }
         });
@@ -44,7 +44,7 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         view_res_or_cout_books.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i3=new Intent(StudentMainMenuActivity.this,ReservedBooks.class);
+                Intent i3=new Intent(StudentMenu.this,ReservedBooks.class);
                 startActivity(i3);
                 //setContentView(R.layout.about);
             }
@@ -53,7 +53,7 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i4=new Intent(StudentMainMenuActivity.this,AboutUs.class);
+                Intent i4=new Intent(StudentMenu.this,AboutUs.class);
                 startActivity(i4);
                 //setContentView(R.layout.about);
             }

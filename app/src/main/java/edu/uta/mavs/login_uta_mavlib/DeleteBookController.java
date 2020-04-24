@@ -26,8 +26,6 @@ public class DeleteBookController extends AppCompatActivity {
             public void onClick(View v) {
                 final String ISBN = isbn.getText().toString().trim();
 
-                final String key_total = "total";
-
                 if(TextUtils.isEmpty(ISBN))
                 {
                     isbn.setError("ISBN is required.");

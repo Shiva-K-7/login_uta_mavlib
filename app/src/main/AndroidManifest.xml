@@ -18,10 +18,10 @@
         <activity android:name=".AboutUs" />
         <activity android:name=".ManageBooks" />
         <activity android:name=".CheckinBooks" />
-        <activity android:name=".CheckoutBooks" />
+        <activity android:name=".CheckoutController" />
         <activity android:name=".SearchBooks" />
         <activity android:name=".LibrarianMenu" />
-        <activity android:name=".StudentMainMenuActivity" />
+        <activity android:name=".StudentMenu" />
         <activity android:name=".ui.login.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -20,6 +20,16 @@ public class Book {
         mNumReserved = 0;
     }
 
+    public Book(String aIsbn, String aTitle, String aAuthor, String aCategory, int aTotal, int aIssued, int aReserved){
+        mIsbn = aIsbn;
+        mTitle = aTitle;
+        mAuthor = aAuthor;
+        mCategory = aCategory;
+        mTotal = aTotal;
+        mNumIssued = aIssued;
+        mNumReserved = aReserved;
+    }
+
     public String getIsbn() {
         return mIsbn;
     }
