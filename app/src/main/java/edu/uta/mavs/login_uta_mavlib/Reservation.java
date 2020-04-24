@@ -4,22 +4,30 @@ import java.time.LocalDate;
 
 public class Reservation {
 
-    private String mUserId;
-    private String mIsbn;
-    private LocalDate mAvailableDate;
+    private String userId;
+    private String isbn;
+    private String availableDate;
 
-    public Reservation(String aUserId, String aIsbn){
-        mUserId = aUserId;
-        mIsbn = aIsbn;
-        mAvailableDate = LocalDate.now();
+    public Reservation(){
+        //for firestore
     }
 
-    //todo: constructor from database
+    public Reservation(String aUserId, String aIsbn){
+        userId = aUserId;
+        isbn = aIsbn;
+        availableDate = LocalDate.now().toString();
+    }
 
-    public String getSid() { return mUserId; }
+    public Reservation(String aUserId, String aIsbn, String aAvailableDate){
+        userId = aUserId;
+        isbn = aIsbn;
+        availableDate = aAvailableDate;
+    }
 
-    public String getIsbn() { return mIsbn; }
+    public String getUserId() { return userId; }
 
-    public String getAvailDate() { return mAvailableDate.toString(); }
+    public String getIsbn() { return isbn; }
+
+    public String getAvailableDate() { return availableDate; }
 
 }

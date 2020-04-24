@@ -14,23 +14,38 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 
 
 public class DBMgr {
 
     private static DBMgr single_instance = null;
 
+    private static final String TAG = "DBMgr";
+
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
+    private CollectionReference studentDb;
+    private CollectionReference librarianDb;
+    private CollectionReference bookDb;
+    private CollectionReference checkoutDb;
+    private CollectionReference reservationDb;
 
     public DBMgr() {
         fAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
-
+        studentDb = database.collection("Student");
+        librarianDb = database.collection("Librarian");
+        bookDb = database.collection("Book");
+        checkoutDb = database.collection("Checkout");
+        reservationDb = database.collection("Reservation");
     }
 
     //Singleton Database Manager
@@ -45,7 +60,7 @@ public class DBMgr {
 
         if(fUser!=null){
             String lUid = fUser.getUid();
-            DocumentReference docIdRef = database.collection("Librarian").document(lUid);
+            DocumentReference docIdRef = librarianDb.document(lUid);
             docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -57,7 +72,7 @@ public class DBMgr {
                             aContext.startActivity(new Intent(aContext, StudentMenu.class));
                         }
                     } else {
-                        Log.d("DBMgr", "Failed with: ", task.getException());
+                        Log.d(TAG, "Failed with: ", task.getException());
                     }
                 }
             });
@@ -90,7 +105,7 @@ public class DBMgr {
                 if(task.isSuccessful()){
                     Toast.makeText(aContext, "User Created", Toast.LENGTH_SHORT).show();
                     final String userID = fAuth.getCurrentUser().getUid();
-                    DocumentReference dr = database.collection("Student").document(userID);
+                    DocumentReference dr = studentDb.document(userID);
 
                     dr.set(aNewStudent).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -114,7 +129,7 @@ public class DBMgr {
 
 
     public void storeBook(final Book aNewBook, final Context aContext){
-        database.collection("Book").document(aNewBook.getIsbn()).set(aNewBook)
+        bookDb.document(aNewBook.getIsbn()).set(aNewBook)
             .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -134,7 +149,7 @@ public class DBMgr {
 
     public void getBook(final String aIsbn, final OnGetBookListener listener){
         listener.onStart();
-        DocumentReference docIdRef = database.collection("Book").document(aIsbn);
+        DocumentReference docIdRef = bookDb.document(aIsbn);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -147,8 +162,29 @@ public class DBMgr {
                         listener.onFailure();
                     }
                 } else {
-                    Log.d("DBMgr", "Failed with: ", task.getException());
+                    Log.d(TAG, "Failed with: ", task.getException());
                 }
+            }
+        });
+    }
+
+    public void getBooks(String isbn, String title, String author, String category, final OnGetBooksListener listener){
+        listener.onStart();
+        bookDb.whereEqualTo("isbn", isbn).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        ArrayList<Book> books = new ArrayList<Book>();
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            Book book = docSnapshot.toObject(Book.class);
+                            books.add(book);
+                        }
+                        listener.onSuccess(books);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
             }
         });
     }
@@ -157,7 +193,7 @@ public class DBMgr {
     public void deleteBook(final String aIsbn, final Context aContext){
         //todo will also need to delete all reservation and checkout objects for isbn here
 
-        database.collection("Book").document(aIsbn)
+        bookDb.document(aIsbn)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
