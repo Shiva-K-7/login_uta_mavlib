@@ -9,6 +9,10 @@ public class User {
     protected String userPassword;
 
 
+    public User () {
+        //only for firestore database
+    }
+
     public User(String aUserId, String aUserFName, String aUserLName, String aUserEmail, String aUserPass) {
         userId = aUserId;
         userFName = aUserFName;
@@ -17,13 +21,13 @@ public class User {
         userPassword = aUserPass;
     }
 
-    public String getId(){ return userId; }
+    public String getUserId(){ return userId; }
 
-    public String getFName(){ return userFName; }
+    public String getUserFName(){ return userFName; }
 
-    public String getLName(){ return userLName; }
+    public String getUserLName(){ return userLName; }
 
-    public String getEmail(){ return userEmail; }
+    public String getUserEmail(){ return userEmail; }
 
     public boolean verifyPassword(String aPass){
         if (aPass == userPassword)
@@ -32,6 +36,6 @@ public class User {
             return false;
     }
 
-    public String getPassword(){ return userPassword; }
+    public String getUserPassword(){ return userPassword; }
 
 }

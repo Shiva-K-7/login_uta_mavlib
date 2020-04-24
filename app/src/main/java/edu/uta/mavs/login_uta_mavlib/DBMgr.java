@@ -18,9 +18,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 
 public class DBMgr {
@@ -86,7 +83,7 @@ public class DBMgr {
 
 
     public void storeStudent(final Student aNewStudent, final Context aContext){
-        fAuth.createUserWithEmailAndPassword(aNewStudent.getEmail(),aNewStudent.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        fAuth.createUserWithEmailAndPassword(aNewStudent.getUserEmail(),aNewStudent.getUserPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
@@ -94,15 +91,8 @@ public class DBMgr {
                     Toast.makeText(aContext, "User Created", Toast.LENGTH_SHORT).show();
                     final String userID = fAuth.getCurrentUser().getUid();
                     DocumentReference dr = database.collection("Student").document(userID);
-                    Map<String,Object> user = new HashMap<>();
 
-                    user.put("userId", aNewStudent.getId());
-                    user.put("userFName", aNewStudent.getFName());
-                    user.put("userLName", aNewStudent.getLName());
-                    user.put("userEmail", aNewStudent.getEmail());
-                    user.put("userPassword", aNewStudent.getPassword());
-
-                    dr.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    dr.set(aNewStudent).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("TAG" ,"onSuccess: User profile is created for "+userID);
@@ -124,17 +114,8 @@ public class DBMgr {
 
 
     public void storeBook(final Book aNewBook, final Context aContext){
-        Map<String,Object> Book = new HashMap<>();
-
-        Book.put("isbn", aNewBook.getIsbn());
-        Book.put("title", aNewBook.getTitle());
-        Book.put("author", aNewBook.getAuthor());
-        Book.put("category", aNewBook.getCategory());
-        Book.put("total", aNewBook.getTotal());
-        Book.put("numIssued",0);
-        Book.put("numReserved",0);
-
-        database.collection("Book").document(aNewBook.getIsbn()).set(Book).addOnSuccessListener(new OnSuccessListener<Void>() {
+        database.collection("Book").document(aNewBook.getIsbn()).set(aNewBook)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(aContext, "Book is added to the Database", Toast.LENGTH_SHORT).show();
@@ -160,14 +141,7 @@ public class DBMgr {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Book book = new Book(document.get("isbn").toString(),
-                                document.get("title").toString(),
-                                document.get("author").toString(),
-                                document.get("category").toString(),
-                                Integer.parseInt(document.get("total").toString()),
-                                Integer.parseInt(document.get("numIssued").toString()),
-                                Integer.parseInt(document.get("numReserved").toString())
-                        );
+                        Book book = document.toObject(Book.class);
                         listener.onSuccess(book);
                     } else {
                         listener.onFailure();
