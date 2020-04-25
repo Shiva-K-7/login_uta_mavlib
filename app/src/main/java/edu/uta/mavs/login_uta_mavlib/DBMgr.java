@@ -189,9 +189,80 @@ public class DBMgr {
         });
     }
 
-    public void getBooks(String isbn, String title, String author, String category, final OnGetBooksListener listener){
+
+    public void getBooksAll(final String isbn, final String title, final String author, final String category, final OnGetBooksListener listener){
         listener.onStart();
-        bookDb.whereEqualTo("isbn", isbn).get()
+        bookDb.whereEqualTo("isbn", isbn)
+                .whereEqualTo( "title", title )
+                .whereEqualTo( "author", author )
+                .whereEqualTo( "category", category )
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        ArrayList<Book> books = new ArrayList<Book>();
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            Book book = docSnapshot.toObject(Book.class); //Error
+                            books.add(book);
+                        }
+                        listener.onSuccess(books);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+    }
+
+    public void getBooks(String field1, String field2, String field3, String input1, String input2, String input3, final OnGetBooksListener listener){
+        listener.onStart();
+        bookDb.whereEqualTo( field1, input1 )
+                .whereEqualTo( field2, input2 )
+                .whereEqualTo( field3, input3 ).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        ArrayList<Book> books = new ArrayList<Book>();
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            Book book = docSnapshot.toObject(Book.class); //Error
+                            books.add(book);
+                        }
+                        listener.onSuccess(books);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+    }
+
+    public void getBooks(String field1, String field2, String input1, String input2, final OnGetBooksListener listener){
+        listener.onStart();
+        bookDb.whereEqualTo( field1, input1)
+                .whereEqualTo( field2, input2 ).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        ArrayList<Book> books = new ArrayList<Book>();
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            Book book = docSnapshot.toObject(Book.class); //Error
+                            books.add(book);
+                        }
+                        listener.onSuccess(books);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+    }
+
+    public void getBooks(String field1,  String input1, final OnGetBooksListener listener){
+        listener.onStart();
+        bookDb.whereEqualTo( field1, input1 ).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

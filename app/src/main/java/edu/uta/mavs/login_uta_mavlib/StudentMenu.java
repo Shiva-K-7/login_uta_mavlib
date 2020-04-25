@@ -36,7 +36,7 @@ public class StudentMenu extends AppCompatActivity {
         search_books.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent i2=new Intent(StudentMenu.this,SearchBooks.class);
+                Intent i2=new Intent(StudentMenu.this, SearchController.class);
                 startActivity(i2);
             }
         });

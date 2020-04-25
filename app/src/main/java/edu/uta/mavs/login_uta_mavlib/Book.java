@@ -1,6 +1,8 @@
 package edu.uta.mavs.login_uta_mavlib;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     private String isbn;
     private String title;
     private String author;
@@ -10,7 +12,7 @@ public class Book {
     private int numReserved;
 
 
-    public Book(){
+    public Book() {
         //only for firestore
     }
 

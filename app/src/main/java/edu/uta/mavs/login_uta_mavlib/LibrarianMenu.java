@@ -37,7 +37,7 @@ public class LibrarianMenu extends AppCompatActivity {
         search_books.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent i1=new Intent(LibrarianMenu.this,SearchBooks.class);
+                Intent i1=new Intent(LibrarianMenu.this, SearchController.class);
                 startActivity(i1);
             }
         });
