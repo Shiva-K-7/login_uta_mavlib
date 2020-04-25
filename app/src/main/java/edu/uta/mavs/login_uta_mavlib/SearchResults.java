@@ -1,5 +1,6 @@
 package edu.uta.mavs.login_uta_mavlib;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,26 +18,28 @@ import java.util.Map;
 
 public class SearchResults extends AppCompatActivity {
 
+    String SearchResultsLog = "SearchResults Log" ;
+
     //ListView bookResults;
     //ArrayList<String> returnedBookResults = new ArrayList<>();
     ArrayList<Book> returnedBookResults = new ArrayList<>();
-    ArrayList< String > authors = new ArrayList< >( ) ;
-    ArrayList< String > titles = new ArrayList< >( ) ;
 
     List<Map<String, String>> bookResultsTitleAndAuthor = new ArrayList<Map<String, String>>();
     DBMgr searchBooksDBManager ;
 
-    Book myBook = new Book("1234893234", "Design Patterns", "David Kung", "software", 4);
-    Book myBook2 = new Book( "12348933234", "Call of the Wild", "Jack London", "fiction", 5 );
+    //Book myBook = new Book("1234893234", "Design Patterns", "David Kung", "software", 4);
+    //Book myBook2 = new Book( "12348933234", "Call of the Wild", "Jack London", "fiction", 5 );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        //TODO: Add DB functionality to return book results
-        returnedBookResults.add( myBook ) ;
-        returnedBookResults.add( myBook2 ) ;
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        ArrayList<Book> returnedBookResults = (ArrayList<Book>) args.getSerializable("searchIntent");
+
+        Log.i(SearchResultsLog, "Starting Display of Search Results");
 
         String TEXT1 = "text1" ;
         String TEXT2 = "text2" ;
@@ -45,8 +48,6 @@ public class SearchResults extends AppCompatActivity {
         {
             Map< String, String > bookMap = new HashMap< String, String >( );
             Book thisBook = returnedBookResults.get( i ) ;
-
-            Log.i("Jacob", "thisBook [ " + i + " ] Title = " + thisBook.getTitle( ) ) ;
 
             bookMap.put( TEXT1, thisBook.getTitle( ) ) ;
             bookMap.put( TEXT2, thisBook.getAuthor( ) ) ;
