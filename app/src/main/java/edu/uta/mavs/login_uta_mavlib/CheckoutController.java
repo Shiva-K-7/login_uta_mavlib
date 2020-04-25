@@ -49,7 +49,7 @@ public class CheckoutController extends AppCompatActivity {
                         dbMgr.getBook(ISBN, new OnGetBookListener() {
                             @Override
                             public void onSuccess(Book book) {
-                                Checkout newCheckout = new Checkout(ISBN, SID);
+                                Checkout newCheckout = new Checkout(SID, ISBN);
                                 dbMgr.storeCheckout(newCheckout, CheckoutController.this);
                                 book.reduceAvailabilityCount(true, false);
                                 dbMgr.storeBook(book, CheckoutController.this);

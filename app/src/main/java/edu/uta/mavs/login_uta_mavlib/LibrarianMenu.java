@@ -62,7 +62,7 @@ public class LibrarianMenu extends AppCompatActivity {
         checkin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i2=new Intent(LibrarianMenu.this,CheckinBooks.class);
+                Intent i2=new Intent(LibrarianMenu.this, CheckinController.class);
                 startActivity(i2);
                // setContentView(R.layout.activity_checkin_books);
             }

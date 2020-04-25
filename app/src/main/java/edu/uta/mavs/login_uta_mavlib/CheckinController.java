@@ -11,8 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class CheckinBooks extends AppCompatActivity {
+public class CheckinController extends AppCompatActivity {
 
+    private static final String TAG = "CheckinController";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,27 +41,39 @@ public class CheckinBooks extends AppCompatActivity {
                     return;
                 }
 
-                DBMgr dbMgr = DBMgr.getInstance();
+                final DBMgr dbMgr = DBMgr.getInstance();
 
-                dbMgr.getBook(ISBN, new OnGetBookListener() {
+                dbMgr.getUser(SID, new OnGetUserListener() {
                     @Override
-                    public void onSuccess(Book book) {
-
-                        Log.d("Check-in", "Book ID " + book.getTitle());
+                    public void onSuccess(User user) {
+                        dbMgr.getBook(ISBN, new OnGetBookListener() {
+                            @Override
+                            public void onSuccess(Book book) {
+                                dbMgr.deleteCheckout(ISBN,SID);
+                                book.increaseAvailabilityCount(true, false);
+                                dbMgr.storeBook(book, CheckinController.this);
+                            }
+                            @Override
+                            public void onStart() {
+                                Log.d(TAG, "onStart: getBook");
+                            }
+                            @Override
+                            public void onFailure() {
+                                Log.d(TAG, "onFailure: getBook");
+                                Toast.makeText(CheckinController.this, "Book doesn't exist", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-
                     @Override
                     public void onStart() {
-                        Log.d("Check-in", "Attempting to return book");
+                        Log.d(TAG, "onStart: getUser");
                     }
-
                     @Override
                     public void onFailure() {
-                        Log.d("Check-in", "Checkout failed");
-                        Toast.makeText(CheckinBooks.this, "Book doesn't exist", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onFailure: getUser");
+                        Toast.makeText(CheckinController.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 });
-
 
             }
         });

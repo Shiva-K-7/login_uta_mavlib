@@ -316,7 +316,6 @@ public class DBMgr {
 
 
     public void deleteCheckout(String aIsbn, String aUserId){
-
         checkoutDb.whereEqualTo("isbn", aIsbn)
                 .whereEqualTo("userId", aUserId).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

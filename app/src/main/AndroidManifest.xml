@@ -17,7 +17,7 @@
         <activity android:name=".RegisterController" />
         <activity android:name=".AboutUs" />
         <activity android:name=".ManageBooks" />
-        <activity android:name=".CheckinBooks" />
+        <activity android:name=".CheckinController" />
         <activity android:name=".CheckoutController" />
         <activity android:name=".SearchBooks" />
         <activity android:name=".LibrarianMenu" />
