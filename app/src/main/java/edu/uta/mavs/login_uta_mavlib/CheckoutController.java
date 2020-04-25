@@ -43,37 +43,39 @@ public class CheckoutController extends AppCompatActivity {
 
                 final DBMgr dbMgr = DBMgr.getInstance();
 
-
-                dbMgr.getBook(ISBN, new OnGetBookListener() {
+                dbMgr.getUser(SID, new OnGetUserListener() {
                     @Override
-                    public void onSuccess(Book book) {
-                        dbMgr.getUser(SID, new OnGetUserListener() {
+                    public void onSuccess(User user) {
+                        dbMgr.getBook(ISBN, new OnGetBookListener() {
                             @Override
-                            public void onSuccess(User user) {
+                            public void onSuccess(Book book) {
                                 Checkout newCheckout = new Checkout(ISBN, SID);
                                 dbMgr.storeCheckout(newCheckout, CheckoutController.this);
+                                book.reduceAvailabilityCount(true, false);
+                                dbMgr.storeBook(book, CheckoutController.this);
                             }
                             @Override
                             public void onStart() {
-                                Log.d(TAG, "onStart: getUser");
+                                Log.d(TAG, "onStart: getBook");
                             }
                             @Override
                             public void onFailure() {
-                                Log.d(TAG, "onFailure: getUser");
-                                Toast.makeText(CheckoutController.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onFailure: getBook");
+                                Toast.makeText(CheckoutController.this, "Book doesn't exist", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                     @Override
                     public void onStart() {
-                        Log.d(TAG, "onStart: getBook");
+                        Log.d(TAG, "onStart: getUser");
                     }
                     @Override
                     public void onFailure() {
-                        Log.d(TAG, "onFailure: getBook");
-                        Toast.makeText(CheckoutController.this, "Book doesn't exist", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onFailure: getUser");
+                        Toast.makeText(CheckoutController.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
         });
 
