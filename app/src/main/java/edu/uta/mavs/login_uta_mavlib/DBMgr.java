@@ -197,7 +197,7 @@ public class DBMgr {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         ArrayList<Book> books = new ArrayList<Book>();
                         for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            Book book = docSnapshot.toObject(Book.class);
+                            Book book = docSnapshot.toObject(Book.class); //Error
                             books.add(book);
                         }
                         listener.onSuccess(books);

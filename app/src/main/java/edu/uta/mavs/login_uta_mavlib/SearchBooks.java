@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -15,8 +19,14 @@ public class SearchBooks extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_books);
+
+        Log.i("Jacob", "Jacob searching for books");
+
+        final String Jacob = "Jacob" ;
+
 
         final Button search = findViewById(R.id.button5);
         search.setOnClickListener(new View.OnClickListener(){
@@ -24,21 +34,38 @@ public class SearchBooks extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i=new Intent(SearchBooks.this,SearchResults.class);
                 startActivity(i);
-                //setContentView(R.layout.activity_add_book);
+
+                TextInputEditText input_ISBN = (TextInputEditText) findViewById(R.id.TIET_ISBN);
+                TextInputEditText input_title = (TextInputEditText) findViewById(R.id.TIET_Title);
+                TextInputEditText input_author = (TextInputEditText) findViewById(R.id.TIET_Author);
+                TextInputEditText input_category = (TextInputEditText) findViewById(R.id.TIET_Category);
+
+                DBMgr searchBooksDBMgr = DBMgr.getInstance();
+
+                String myISBN = input_ISBN.getText().toString();
+                String myTitle = input_title.getText().toString();
+                String myAuthor = input_author.getText().toString();
+                String myCategory = input_category.getText().toString();
+
+                searchBooksDBMgr.getBooks( myISBN, myTitle, myAuthor, myCategory, new OnGetBooksListener( ) {
+                    @Override
+                    public void onSuccess( ArrayList< Book > books ) {
+                        Log.i( Jacob, "Num of books found = " + books.size( ) ) ;
+                    }
+
+                    @Override
+                    public void onStart( ) {
+                        Log.i( Jacob, "Attempting to search for books" ) ;
+                    }
+
+                    @Override
+                    public void onFailure( ) {
+                        Log.i( Jacob, "No books found based on search criteria" ) ;
+                    }
+                } ) ;
+
+
             }
         });
-
-       /* ListView lsitView = (ListView) findViewById(R.id.list_view_search_books);
-
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        arrayList.add("Software Engineering");
-        arrayList.add("Theory of Computation");
-        arrayList.add("Design Patterns");
-        arrayList.add("Artificial Intelligence");
-
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
-
-        lsitView.setAdapter(arrayAdapter);*/
     }
 }
