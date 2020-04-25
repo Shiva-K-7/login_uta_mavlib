@@ -1,21 +1,16 @@
 package edu.uta.mavs.login_uta_mavlib;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +26,8 @@ public class SearchResults extends AppCompatActivity {
     List<Map<String, String>> bookResultsTitleAndAuthor = new ArrayList<Map<String, String>>();
     DBMgr searchBooksDBManager ;
 
-    Book myBook = new Book( "Design Patterns", "David Kung" );
-    Book myBook2 = new Book( "Call of the Wild", "Jack London" );
+    Book myBook = new Book("1234893234", "Design Patterns", "David Kung", "software", 4);
+    Book myBook2 = new Book( "12348933234", "Call of the Wild", "Jack London", "fiction", 5 );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

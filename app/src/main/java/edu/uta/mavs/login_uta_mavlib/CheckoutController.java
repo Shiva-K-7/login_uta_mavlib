@@ -13,6 +13,8 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class CheckoutController extends AppCompatActivity {
 
+    private static final String TAG = "Checkout";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,29 +41,39 @@ public class CheckoutController extends AppCompatActivity {
                     return;
                 }
 
-                DBMgr dbMgr = DBMgr.getInstance();
+                final DBMgr dbMgr = DBMgr.getInstance();
 
 
                 dbMgr.getBook(ISBN, new OnGetBookListener() {
                     @Override
                     public void onSuccess(Book book) {
-
-                        Log.d("Checkout", "Book ID " + book.getTitle());
+                        dbMgr.getUser(SID, new OnGetUserListener() {
+                            @Override
+                            public void onSuccess(User user) {
+                                Checkout newCheckout = new Checkout(ISBN, SID);
+                                dbMgr.storeCheckout(newCheckout, CheckoutController.this);
+                            }
+                            @Override
+                            public void onStart() {
+                                Log.d(TAG, "onStart: getUser");
+                            }
+                            @Override
+                            public void onFailure() {
+                                Log.d(TAG, "onFailure: getUser");
+                                Toast.makeText(CheckoutController.this, "User doesn't exist", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-
                     @Override
                     public void onStart() {
-                        Log.d("Checkout", "Attempting to get book");
+                        Log.d(TAG, "onStart: getBook");
                     }
-
                     @Override
                     public void onFailure() {
-                        Log.d("Checkout", "Checkout failed");
+                        Log.d(TAG, "onFailure: getBook");
                         Toast.makeText(CheckoutController.this, "Book doesn't exist", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
         });
 

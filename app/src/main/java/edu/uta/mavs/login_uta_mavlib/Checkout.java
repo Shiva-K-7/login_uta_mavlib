@@ -1,7 +1,5 @@
 package edu.uta.mavs.login_uta_mavlib;
 
-import com.google.firebase.database.Exclude;
-
 import java.time.LocalDate;
 
 public class Checkout {
@@ -9,7 +7,7 @@ public class Checkout {
     private String userId;
     private String isbn;
     private String issueDate;
-    private LocalDate dueDate;
+    private String dueDate;
 
     public Checkout(){
         //for firestore
@@ -19,10 +17,10 @@ public class Checkout {
         userId = aUserId;
         isbn = aIsbn;
         issueDate = LocalDate.now().toString();
-        dueDate = LocalDate.now().plusWeeks(1);
+        dueDate = LocalDate.now().plusWeeks(1).toString();
     }
 
-    public Checkout(String aUserId, String aIsbn, String aIssueDate, LocalDate aDueDate) {
+    public Checkout(String aUserId, String aIsbn, String aIssueDate, String aDueDate) {
         userId = aUserId;
         isbn = aIsbn;
         issueDate = aIssueDate;
@@ -35,9 +33,8 @@ public class Checkout {
 
     public String getIssueDate() { return issueDate; }
 
-    @Exclude
-    public String getStrDueDate() { return dueDate.toString(); }
+    public String getDueDate() { return dueDate; }
 
-    public LocalDate getDueDate() { return dueDate; }
+
 
 }

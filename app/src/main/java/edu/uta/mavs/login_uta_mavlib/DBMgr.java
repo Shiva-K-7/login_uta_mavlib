@@ -212,8 +212,8 @@ public class DBMgr {
 
 
     public void deleteBook(final String aIsbn, final Context aContext){
-        deleteCheckout(aIsbn);
-        deleteReservation(aIsbn);
+        deleteBookCheckout(aIsbn);
+        deleteBookReservation(aIsbn);
 
         bookDb.document(aIsbn)
                 .delete()
@@ -237,8 +237,7 @@ public class DBMgr {
 
 
     public void storeCheckout(final Checkout aCheckout, final Context aContext){
-        deleteReservation(aCheckout.getIsbn());
-        //todo - maybe not delete all reservations
+        deleteReservation(aCheckout.getIsbn(), aCheckout.getUserId());
         checkoutDb.add(aCheckout).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -290,9 +289,36 @@ public class DBMgr {
     }
 
 
-    public void deleteCheckout(String aIsbn){
+    public void deleteBookCheckout(String aIsbn){
 
         checkoutDb.whereEqualTo("isbn", aIsbn).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            checkoutDb.document(docSnapshot.getId())
+                                    .delete().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+    }
+
+
+    public void deleteCheckout(String aIsbn, String aUserId){
+
+        checkoutDb.whereEqualTo("isbn", aIsbn)
+                .whereEqualTo("userId", aUserId).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -367,9 +393,36 @@ public class DBMgr {
     }
 
 
-    public void deleteReservation(String aIsbn){
+    public void deleteBookReservation(String aIsbn){
 
         reservationDb.whereEqualTo("isbn", aIsbn).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            reservationDb.document(docSnapshot.getId())
+                                    .delete().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, e.toString());
+                                }
+                            });
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+    }
+
+
+    public void deleteReservation(String aIsbn, String aUserId){
+
+        reservationDb.whereEqualTo("isbn", aIsbn)
+                .whereEqualTo("userId", aUserId).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
