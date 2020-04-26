@@ -1,8 +1,12 @@
 package  edu.uta.mavs.login_uta_mavlib.ui.login;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,12 +15,14 @@ import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.uta.mavs.login_uta_mavlib.DBMgr;
+import edu.uta.mavs.login_uta_mavlib.NotificationController;
 import edu.uta.mavs.login_uta_mavlib.R;
 import edu.uta.mavs.login_uta_mavlib.RegisterController;
 import edu.uta.mavs.login_uta_mavlib.password_security;
 
 public class LoginController extends AppCompatActivity {
 
+    private static final String TAG = "LoginController";
 
     private DBMgr dbMgr;
 
@@ -69,7 +75,29 @@ public class LoginController extends AppCompatActivity {
 
                 dbMgr.login(em, password_encrypted, LoginController.this);
 
+                scheduleJob();
+
             }
         });
     }
+
+
+    public void scheduleJob() {
+        ComponentName componentName = new ComponentName(this, NotificationController.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setRequiresCharging(false)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPersisted(true)
+                .setPeriodic(15 * 60 * 1000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, "Job scheduled");
+        } else {
+            Log.d(TAG, "Job scheduling failed");
+        }
+    }
+
 }

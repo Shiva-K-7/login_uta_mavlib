@@ -149,6 +149,37 @@ public class DBMgr {
     }
 
 
+    public void getCurrentUser(final OnGetUserListener listener){
+        listener.onStart();
+        FirebaseUser fUser = fAuth.getCurrentUser();
+
+        if(fUser!=null){
+            String lUid = fUser.getUid();
+            DocumentReference docIdRef = studentDb.document(lUid);
+            docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "onComplete: found user data");
+                            Student student = document.toObject(Student.class);
+                            listener.onSuccess(student);
+                        } else {
+                            Log.d(TAG, "onComplete: failed to get user data");
+                            listener.onFailure();
+                        }
+                    } else {
+                        Log.d(TAG, "Failed with: ", task.getException());
+                        listener.onFailure();
+                    }
+                }
+            });
+            Log.d(TAG, "getCurrentUser: found User");
+        }
+    }
+
+
     public void storeBook(final Book aNewBook, final Context aContext){
         bookDb.document(aNewBook.getIsbn()).set(aNewBook)
             .addOnSuccessListener(new OnSuccessListener<Void>() {

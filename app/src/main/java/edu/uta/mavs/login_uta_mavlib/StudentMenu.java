@@ -1,18 +1,19 @@
 package edu.uta.mavs.login_uta_mavlib;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
 
 public class StudentMenu extends AppCompatActivity {
+
+    private static final String TAG = "StudentMenu";
 
     @Override
     public void onBackPressed() {
@@ -29,9 +30,6 @@ public class StudentMenu extends AppCompatActivity {
         final Button search_books = findViewById(R.id.search_books_librarian_menu);
         final Button view_res_or_cout_books = findViewById(R.id.view_reserved_or_checked_out_books_librarian_menu);
         final Button about = findViewById(R.id.about);
-        final Button notification = findViewById(R.id.notification);
-
-
 
         search_books.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -58,14 +56,6 @@ public class StudentMenu extends AppCompatActivity {
                 //setContentView(R.layout.about);
             }
         });
-
-        notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NotificationGenerator.openActivityNotification(getApplicationContext());
-
-            }
-        });
-
     }
+
 }

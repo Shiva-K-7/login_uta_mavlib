@@ -49,10 +49,15 @@ public class CheckoutController extends AppCompatActivity {
                         dbMgr.getBook(ISBN, new OnGetBookListener() {
                             @Override
                             public void onSuccess(Book book) {
-                                Checkout newCheckout = new Checkout(SID, ISBN);
-                                dbMgr.storeCheckout(newCheckout, CheckoutController.this);
-                                book.reduceAvailabilityCount(true, false);
-                                dbMgr.storeBook(book, CheckoutController.this);
+                                if (book.checkAvailability()) {
+                                    Checkout newCheckout = new Checkout(SID, ISBN);
+                                    dbMgr.storeCheckout(newCheckout, CheckoutController.this);
+                                    book.reduceAvailabilityCount(true, false);
+                                    dbMgr.storeBook(book, CheckoutController.this);
+                                }
+                                else{
+                                    Toast.makeText(CheckoutController.this, "No Copies available", Toast.LENGTH_SHORT).show();
+                                }
                             }
                             @Override
                             public void onStart() {
