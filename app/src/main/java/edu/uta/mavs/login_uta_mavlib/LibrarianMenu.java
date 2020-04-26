@@ -1,24 +1,19 @@
 package edu.uta.mavs.login_uta_mavlib;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LibrarianMenu extends AppCompatActivity {
 
+    private final DBMgr dbMgr = DBMgr.getInstance();
+
     @Override
     public void onBackPressed() {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), LoginController.class));
-        Toast.makeText(getApplicationContext(), "you have been logged out.\n Login again.", Toast.LENGTH_SHORT).show();
+        dbMgr.logout(LibrarianMenu.this);
         finish();
     }
 
@@ -55,7 +50,6 @@ public class LibrarianMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i2=new Intent(LibrarianMenu.this,AboutUs.class);
                 startActivity(i2);
-                //setContentView(R.layout.about);
             }
         });
 
@@ -64,7 +58,6 @@ public class LibrarianMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i2=new Intent(LibrarianMenu.this, CheckinController.class);
                 startActivity(i2);
-               // setContentView(R.layout.activity_checkin_books);
             }
         });
 
@@ -73,7 +66,6 @@ public class LibrarianMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i2=new Intent(LibrarianMenu.this,ManageBooks.class);
                 startActivity(i2);
-                 //setContentView(R.layout.activity_manage_books);
             }
         });
 

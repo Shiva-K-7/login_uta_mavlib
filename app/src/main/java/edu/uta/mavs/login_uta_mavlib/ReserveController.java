@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class ReserveController extends AppCompatActivity {
 
     private static final String TAG = "ReserveController";
@@ -27,20 +29,40 @@ public class ReserveController extends AppCompatActivity {
         TextView tvAuthor = findViewById( R.id.tvAuthor );
         TextView tvISBN = findViewById( R.id.tvISBN );
         TextView tvCategory = findViewById( R.id.tvCategory );
+        final TextView tvAvailable = findViewById(R.id.tvAvailable);
         final Button reserve = findViewById(R.id.reserve_button);
 
         tvTitle.setText( "Title: " + viewedBook.getTitle( ).toUpperCase( ) );
         tvAuthor.setText( "Author: " + viewedBook.getAuthor( ).toUpperCase( ) );
         tvISBN.setText( "ISBN: " + viewedBook.getIsbn( ) );
         tvCategory.setText( "Category: " + viewedBook.getCategory( ).toUpperCase( ) );
+        tvAvailable.setText("In Stock: "+viewedBook.getNumAvailable()+" / "+viewedBook.getTotal());
 
+        reserve.setVisibility(View.GONE);
+        final DBMgr dbMgr = DBMgr.getInstance();
+
+        dbMgr.getCurrentUser(new OnGetUserListener() {
+            @Override
+            public void onSuccess(User user) {
+                if (viewedBook.checkAvailability()) {
+                    reserve.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "onSuccess: button shown to student");
+                }
+            }
+            @Override
+            public void onStart() {
+                Log.d(TAG, "onStart: (un)hide reserve button");
+            }
+            @Override
+            public void onFailure() {
+                Log.d(TAG, "button hidden from librarian");
+            }
+        });
 
         reserve.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
                 final String ISBN = viewedBook.getIsbn();
-                final DBMgr dbMgr = DBMgr.getInstance();
 
                 dbMgr.getCurrentUser(new OnGetUserListener() {
                     @Override
@@ -59,15 +81,34 @@ public class ReserveController extends AppCompatActivity {
                             }
                             @Override
                             public void onFailure() { //new reservation
-                                if (viewedBook.checkAvailability()) {
-                                    Checkout newReservation = new Checkout(SID, ISBN, false);
-                                    dbMgr.storeCheckout(newReservation,"Reserved", ReserveController.this);
-                                    viewedBook.reduceAvailabilityCount();
-                                    dbMgr.storeBook(viewedBook, "", ReserveController.this);
-                                }
-                                else{
-                                    Toast.makeText(ReserveController.this, "No Copies available", Toast.LENGTH_SHORT).show();
-                                }
+                                dbMgr.getCheckouts(null, SID, new OnGetCheckoutsListener() {
+                                    @Override
+                                    public void onSuccess(ArrayList<Checkout> checkouts) {
+                                        if (checkouts.size() < 5){
+                                            if (viewedBook.checkAvailability()) {
+                                                Checkout newReservation = new Checkout(SID, ISBN, false);
+                                                dbMgr.storeCheckout(newReservation,"Reserved", ReserveController.this);
+                                                viewedBook.reduceAvailabilityCount();
+                                                tvAvailable.setText("In Stock: "+viewedBook.getNumAvailable()+" / "+viewedBook.getTotal());
+                                                dbMgr.storeBook(viewedBook, "", ReserveController.this);
+                                            }
+                                            else{
+                                                Toast.makeText(ReserveController.this, "No Copies available", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        else{
+                                            Toast.makeText(ReserveController.this, "You cannot reserve any more books", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    @Override
+                                    public void onStart() {
+                                        Log.d(TAG, "onStart: Checking number of user checkouts");
+                                    }
+                                    @Override
+                                    public void onFailure() {
+                                        Log.d(TAG, "onFailure: failed to get checkouts");
+                                    }
+                                });
                             }
                         });
                     }

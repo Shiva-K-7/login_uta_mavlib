@@ -42,7 +42,7 @@ public class NotificationController extends JobService {
                                 for (Checkout checkout : checkouts){
                                     Log.d(TAG, "got book "+checkout.getIsbn());
 
-                                    if (!checkout.getDueDate().equals("")) {
+                                    if (!checkout.getDueDate().isEmpty()) {
                                         LocalDate today = LocalDate.now();
                                         LocalDate dueDate = LocalDate.parse(checkout.getDueDate());
                                         long tGo = ChronoUnit.DAYS.between(today, dueDate);

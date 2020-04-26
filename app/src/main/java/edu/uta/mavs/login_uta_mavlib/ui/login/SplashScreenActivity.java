@@ -1,11 +1,11 @@
 package edu.uta.mavs.login_uta_mavlib.ui.login;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import edu.uta.mavs.login_uta_mavlib.DBMgr;
 import edu.uta.mavs.login_uta_mavlib.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -19,9 +19,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run(){
-                Intent homeIntent = new Intent(SplashScreenActivity.this, LoginController.class);
-                startActivity(homeIntent);
-                finish();
+                DBMgr dbMgr = DBMgr.getInstance();
+                dbMgr.getLoggedInStatus(SplashScreenActivity.this);
             }
 
         }, SPLASH_TIME_OUT);

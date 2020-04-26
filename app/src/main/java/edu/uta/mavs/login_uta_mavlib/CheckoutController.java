@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+
 public class CheckoutController extends AppCompatActivity {
 
     private static final String TAG = "Checkout";
@@ -64,15 +66,31 @@ public class CheckoutController extends AppCompatActivity {
                                     }
                                     @Override
                                     public void onFailure() { //book not reserved
-                                        if (checkoutBook.checkAvailability()) {
-                                            Checkout newCheckout = new Checkout(SID, ISBN, true);
-                                            dbMgr.storeCheckout(newCheckout,"Checked Out", CheckoutController.this);
-                                            checkoutBook.reduceAvailabilityCount();
-                                            dbMgr.storeBook(checkoutBook, "", CheckoutController.this);
-                                        }
-                                        else{
-                                            Toast.makeText(CheckoutController.this, "No Copies available", Toast.LENGTH_SHORT).show();
-                                        }
+                                        dbMgr.getCheckouts(null, SID, new OnGetCheckoutsListener() {
+                                            @Override
+                                            public void onSuccess(ArrayList<Checkout> checkouts) {
+                                                if (checkouts.size() < 5) {
+                                                    if (checkoutBook.checkAvailability()) {
+                                                        Checkout newCheckout = new Checkout(SID, ISBN, true);
+                                                        dbMgr.storeCheckout(newCheckout, "Checked Out", CheckoutController.this);
+                                                        checkoutBook.reduceAvailabilityCount();
+                                                        dbMgr.storeBook(checkoutBook, "", CheckoutController.this);
+                                                    } else {
+                                                        Toast.makeText(CheckoutController.this, "No Copies available", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(CheckoutController.this, "Student cannot checkout any more books", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                            @Override
+                                            public void onStart() {
+                                                Log.d(TAG, "onStart: Checking number of user checkouts");
+                                            }
+                                            @Override
+                                            public void onFailure() {
+                                                Log.d(TAG, "onFailure: failed to get checkouts");
+                                            }
+                                        });
                                     }
                                 });
                             }

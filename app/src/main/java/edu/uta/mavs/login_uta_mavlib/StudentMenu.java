@@ -4,22 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
 
 public class StudentMenu extends AppCompatActivity {
 
-    private static final String TAG = "StudentMenu";
+    private final DBMgr dbMgr = DBMgr.getInstance();
 
     @Override
     public void onBackPressed() {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), LoginController.class));
-        Toast.makeText(getApplicationContext(), "you have been logged out.\n Login again.", Toast.LENGTH_SHORT).show();
+        dbMgr.logout(StudentMenu.this);
         finish();
     }
     @Override
@@ -44,7 +38,6 @@ public class StudentMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i3=new Intent(StudentMenu.this,ReservedBooks.class);
                 startActivity(i3);
-                //setContentView(R.layout.about);
             }
         });
 
@@ -53,7 +46,6 @@ public class StudentMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i4=new Intent(StudentMenu.this,AboutUs.class);
                 startActivity(i4);
-                //setContentView(R.layout.about);
             }
         });
     }

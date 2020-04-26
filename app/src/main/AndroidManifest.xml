@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ReserveController"
-            android:parentActivityName=".SearchResults" />
+            android:parentActivityName=".SearchController" />
         <activity android:name=".SearchResults"
             android:parentActivityName=".SearchController" />
         <activity android:name=".ReservedBooks"

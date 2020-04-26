@@ -27,6 +27,12 @@ public class LoginController extends AppCompatActivity {
     private DBMgr dbMgr;
 
     @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -39,7 +45,6 @@ public class LoginController extends AppCompatActivity {
 
 
         dbMgr = DBMgr.getInstance();
-        dbMgr.getLoggedInStatus(LoginController.this);
 
         new_user.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -23,6 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
+
 
 public class DBMgr {
 
@@ -66,6 +68,7 @@ public class DBMgr {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
+                        Toast.makeText(aContext, "You are logged in!!", Toast.LENGTH_SHORT).show();
                         if (document.exists()) {
                             aContext.startActivity(new Intent(aContext, LibrarianMenu.class));
                         } else {
@@ -76,7 +79,9 @@ public class DBMgr {
                     }
                 }
             });
-            Toast.makeText(aContext, "You are logged in!!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            aContext.startActivity(new Intent(aContext, LoginController.class));
         }
     }
 
@@ -93,6 +98,13 @@ public class DBMgr {
                 }
             }
         });
+    }
+
+
+    public void logout(final Context aContext){
+        fAuth.signOut();
+        aContext.startActivity(new Intent(aContext, LoginController.class));
+        Toast.makeText(aContext, "You have been logged out", Toast.LENGTH_SHORT).show();
     }
 
 
