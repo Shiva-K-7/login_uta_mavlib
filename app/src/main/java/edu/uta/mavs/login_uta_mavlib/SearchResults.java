@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -62,7 +61,7 @@ public class SearchResults extends AppCompatActivity {
 
                 Book myBook = returnedBookResults.get( index ) ;
 
-                Intent intent = new Intent(SearchResults.this, ViewBook.class);
+                Intent intent = new Intent(SearchResults.this, ReserveController.class);
                 Bundle args = new Bundle();
                 args.putSerializable("resultsIntent", myBook );
                 intent.putExtra("BUNDLE", args);
