@@ -81,12 +81,11 @@ public class DBMgr {
     }
 
 
-    public void login(final String aEmail, final String aPass, final Context aContext){
+    public void login(String aEmail, String aPass, final Context aContext){
         fAuth.signInWithEmailAndPassword(aEmail,aPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(aContext, "Login Successful!", Toast.LENGTH_SHORT).show();
                     getLoggedInStatus(aContext);
                 }
                 else{
@@ -122,7 +121,7 @@ public class DBMgr {
     }
 
 
-    public void getUser(final String userId, final OnGetUserListener listener){
+    public void getUser(String userId, final OnGetUserListener listener){
         listener.onStart();
         studentDb.whereEqualTo("userId", userId).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -180,14 +179,15 @@ public class DBMgr {
     }
 
 
-    public void storeBook(final Book aNewBook, final Context aContext){
+    public void storeBook(Book aNewBook, final String aMsg, final Context aContext){
         bookDb.document(aNewBook.getIsbn()).set(aNewBook)
             .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(aContext, "Book is added to the Database", Toast.LENGTH_SHORT).show();
+                if (!aMsg.equals("")) {
+                    Toast.makeText(aContext, aMsg, Toast.LENGTH_SHORT).show();
+                }
                 Log.d("TAG" ,"onSuccess: Book is added to DB");
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -199,7 +199,7 @@ public class DBMgr {
     }
 
 
-    public void getBook(final String aIsbn, final OnGetBookListener listener){
+    public void getBook(String aIsbn, final OnGetBookListener listener){
         listener.onStart();
         DocumentReference docIdRef = bookDb.document(aIsbn);
         docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -313,9 +313,8 @@ public class DBMgr {
     }
 
 
-    public void deleteBook(final String aIsbn, final Context aContext){
+    public void deleteBook(String aIsbn, final Context aContext){
         deleteBookCheckout(aIsbn);
-        deleteBookReservation(aIsbn);
 
         bookDb.document(aIsbn)
                 .delete()
@@ -338,12 +337,12 @@ public class DBMgr {
     }
 
 
-    public void storeCheckout(final Checkout aCheckout, final Context aContext){
-        deleteReservation(aCheckout.getIsbn(), aCheckout.getUserId());
-        checkoutDb.add(aCheckout).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+    public void storeCheckout(Checkout aCheckout, final String aMsg, final Context aContext){
+        checkoutDb.document("i"+aCheckout.getIsbn()+"u"+aCheckout.getUserId())
+                .set(aCheckout).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(aContext, "Book Checked Out", Toast.LENGTH_SHORT).show();
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(aContext, "Book "+aMsg, Toast.LENGTH_SHORT).show();
                 Log.d("TAG" ,"onSuccess: Checkout created");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -357,7 +356,7 @@ public class DBMgr {
     }
 
 
-    public void getCheckout(String aIsbn, String aUserId, final OnGetCheckoutListener listener){
+    public void getCheckouts(String aIsbn, String aUserId, final OnGetCheckoutsListener listener){
         listener.onStart();
         String searchField = "";
         String searchParam = "";
@@ -391,6 +390,30 @@ public class DBMgr {
     }
 
 
+    public void getCheckout(String aIsbn, String aUserId, final OnGetCheckoutListener listener){
+        listener.onStart();
+
+        DocumentReference docIdRef = checkoutDb.document("i"+aIsbn+"u"+aUserId);
+        docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Checkout checkout = document.toObject(Checkout.class);
+                        listener.onSuccess(checkout);
+                    } else {
+                        listener.onFailure();
+                    }
+                } else {
+                    Log.d(TAG, "Failed with: ", task.getException());
+                    listener.onFailure();
+                }
+            }
+        });
+    }
+
+
     public void deleteBookCheckout(String aIsbn){
 
         checkoutDb.whereEqualTo("isbn", aIsbn).get()
@@ -405,7 +428,6 @@ public class DBMgr {
                                     Log.d(TAG, e.toString());
                                 }
                             });
-
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -418,132 +440,23 @@ public class DBMgr {
 
 
     public void deleteCheckout(String aIsbn, String aUserId){
-        checkoutDb.whereEqualTo("isbn", aIsbn)
-                .whereEqualTo("userId", aUserId).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+        checkoutDb.document("i"+aIsbn+"u"+aUserId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            checkoutDb.document(docSnapshot.getId())
-                                    .delete().addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, e.toString());
-                                }
-                            });
-
-                        }
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "Checkout successfully deleted!");
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-            }
-        });
-    }
-
-    public void storeReservation(final Reservation aReservation, final Context aContext){
-        reservationDb.add(aReservation).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(aContext, "Book Reserved", Toast.LENGTH_SHORT).show();
-                Log.d("TAG" ,"onSuccess: Reservation created");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                String error = e.getMessage();
-                Toast.makeText(aContext,"Error"+error,Toast.LENGTH_SHORT).show();
-                Log.d(TAG, e.toString());
-            }
-        });
-    }
-
-
-    public void getReservation(String aIsbn, String aUserId, final OnGetReservationListener listener){
-        listener.onStart();
-        String searchField = "";
-        String searchParam = "";
-        if (aIsbn != null) {
-            searchField = "isbn";
-            searchParam = aIsbn;
-        }
-        else if (aUserId != null) {
-            searchField = "userId";
-            searchParam = aUserId;
-        }
-
-        checkoutDb.whereEqualTo(searchField, searchParam).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        ArrayList<Reservation> reservations = new ArrayList<Reservation>();
-                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            Reservation reservation = docSnapshot.toObject(Reservation.class);
-                            reservations.add(reservation);
-                        }
-                        listener.onSuccess(reservations);
+                    public void onFailure(@NonNull Exception e) {
+                        String error = e.getMessage();
+                        Log.w("TAG", "Error deleting checkout", e);
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-                listener.onFailure();
-            }
-        });
+                });
     }
 
-
-    public void deleteBookReservation(String aIsbn){
-
-        reservationDb.whereEqualTo("isbn", aIsbn).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            reservationDb.document(docSnapshot.getId())
-                                    .delete().addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, e.toString());
-                                }
-                            });
-
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-            }
-        });
-    }
-
-
-    public void deleteReservation(String aIsbn, String aUserId){
-
-        reservationDb.whereEqualTo("isbn", aIsbn)
-                .whereEqualTo("userId", aUserId).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            reservationDb.document(docSnapshot.getId())
-                                    .delete().addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, e.toString());
-                                }
-                            });
-
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
-            }
-        });
-    }
 
 }

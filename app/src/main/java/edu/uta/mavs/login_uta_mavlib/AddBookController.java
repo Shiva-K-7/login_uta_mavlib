@@ -75,7 +75,7 @@ public class AddBookController extends AppCompatActivity {
 
                 Book newBook = new Book(ISBN, TITLE, AUTHOR, CATEGORY, totalBooks);
 
-                dbMgr.storeBook(newBook, AddBookController.this);
+                dbMgr.storeBook(newBook, "Book added to database",AddBookController.this);
             }
         });
     }

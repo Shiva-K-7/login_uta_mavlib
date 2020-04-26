@@ -50,8 +50,8 @@ public class CheckinController extends AppCompatActivity {
                             @Override
                             public void onSuccess(Book book) {
                                 dbMgr.deleteCheckout(ISBN,SID);
-                                book.increaseAvailabilityCount(true, false);
-                                dbMgr.storeBook(book, CheckinController.this);
+                                book.increaseAvailabilityCount();
+                                dbMgr.storeBook(book, "Book Checked In", CheckinController.this);
                             }
                             @Override
                             public void onStart() {

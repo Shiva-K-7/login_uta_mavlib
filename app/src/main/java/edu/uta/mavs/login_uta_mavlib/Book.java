@@ -8,8 +8,7 @@ public class Book implements Serializable {
     private String author;
     private String category;
     private int total;
-    private int numIssued;
-    private int numReserved;
+    private int numAvailable;
 
 
     public Book() {
@@ -22,18 +21,16 @@ public class Book implements Serializable {
         author = aAuthor;
         category = aCategory;
         total = aTotal;
-        numIssued = 0;
-        numReserved = 0;
+        numAvailable = aTotal;
     }
 
-    public Book(String aIsbn, String aTitle, String aAuthor, String aCategory, int aTotal, int aIssued, int aReserved){
+    public Book(String aIsbn, String aTitle, String aAuthor, String aCategory, int aTotal, int aAvailable){
         isbn = aIsbn;
         title = aTitle;
         author = aAuthor;
         category = aCategory;
         total = aTotal;
-        numIssued = aIssued;
-        numReserved = aReserved;
+        numAvailable = aAvailable;
     }
 
     public String getIsbn() {
@@ -54,36 +51,16 @@ public class Book implements Serializable {
 
     public int getTotal() { return total; }
 
-    public int getIssued() { return numIssued; }
-
-    public int getReserved() { return numReserved; }
+    public int getNumAvailable() { return numAvailable; }
 
     public boolean checkAvailability() {
-        if (total - numReserved - numIssued > 0)
+        if (numAvailable > 0)
             return true;
         else
             return false;
     }
 
-    public void increaseAvailabilityCount(boolean aCheckIn, boolean aUnReserve) {
-        if (aCheckIn) {
-            numIssued--;
-            if (numIssued < 0)
-                numIssued = 0;
-        }
-        if (aUnReserve) {
-            numReserved--;
-            if (numReserved < 0)
-                numReserved = 0;
-        }
-    }
+    public void increaseAvailabilityCount() { numAvailable++; }
 
-    public void reduceAvailabilityCount(boolean aCheckOut, boolean aReserve) {
-        if (aCheckOut) {
-            numIssued++;
-        }
-        if (aReserve) {
-            numReserved++;
-        }
-    }
+    public void reduceAvailabilityCount() { numAvailable--; }
 }

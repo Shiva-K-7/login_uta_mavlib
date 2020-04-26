@@ -34,7 +34,7 @@ public class NotificationController extends JobService {
                     @Override
                     public void onSuccess(User user) {
                         Log.d(TAG, "got user " + user.getUserId());
-                        dbMgr.getCheckout(null, user.getUserId(), new OnGetCheckoutListener() {
+                        dbMgr.getCheckouts(null, user.getUserId(), new OnGetCheckoutsListener() {
                             @Override
                             public void onSuccess(ArrayList<Checkout> checkouts) {
 
@@ -42,11 +42,13 @@ public class NotificationController extends JobService {
                                 for (Checkout checkout : checkouts){
                                     Log.d(TAG, "got book "+checkout.getIsbn());
 
-                                    LocalDate today = LocalDate.now();
-                                    LocalDate dueDate = LocalDate.parse(checkout.getDueDate());
-                                    long tGo = ChronoUnit.DAYS.between(today, dueDate);
-                                    if (tGo < 2)
-                                        notifyMe = true;
+                                    if (!checkout.getDueDate().equals("")) {
+                                        LocalDate today = LocalDate.now();
+                                        LocalDate dueDate = LocalDate.parse(checkout.getDueDate());
+                                        long tGo = ChronoUnit.DAYS.between(today, dueDate);
+                                        if (tGo < 2)
+                                            notifyMe = true;
+                                    }
                                 }
 
                                 if (notifyMe)

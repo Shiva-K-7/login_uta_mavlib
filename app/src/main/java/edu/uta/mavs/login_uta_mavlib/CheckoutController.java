@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class CheckoutController extends AppCompatActivity {
 
     private static final String TAG = "Checkout";
+    private Book checkoutBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +50,31 @@ public class CheckoutController extends AppCompatActivity {
                         dbMgr.getBook(ISBN, new OnGetBookListener() {
                             @Override
                             public void onSuccess(Book book) {
-                                if (book.checkAvailability()) {
-                                    Checkout newCheckout = new Checkout(SID, ISBN);
-                                    dbMgr.storeCheckout(newCheckout, CheckoutController.this);
-                                    book.reduceAvailabilityCount(true, false);
-                                    dbMgr.storeBook(book, CheckoutController.this);
-                                }
-                                else{
-                                    Toast.makeText(CheckoutController.this, "No Copies available", Toast.LENGTH_SHORT).show();
-                                }
+                                checkoutBook = book;
+                                dbMgr.getCheckout(ISBN, SID, new OnGetCheckoutListener() {
+                                    @Override
+                                    public void onSuccess(Checkout checkout) { //checkout reserved book
+                                        Log.d(TAG, "onSuccess: checkouts got");
+                                        checkout.setDates();
+                                        dbMgr.storeCheckout(checkout,"Checked Out", CheckoutController.this);
+                                    }
+                                    @Override
+                                    public void onStart() {
+                                        Log.d(TAG, "onStart: getCheckout");
+                                    }
+                                    @Override
+                                    public void onFailure() { //book not reserved
+                                        if (checkoutBook.checkAvailability()) {
+                                            Checkout newCheckout = new Checkout(SID, ISBN, true);
+                                            dbMgr.storeCheckout(newCheckout,"Checked Out", CheckoutController.this);
+                                            checkoutBook.reduceAvailabilityCount();
+                                            dbMgr.storeBook(checkoutBook, "", CheckoutController.this);
+                                        }
+                                        else{
+                                            Toast.makeText(CheckoutController.this, "No Copies available", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                             @Override
                             public void onStart() {
