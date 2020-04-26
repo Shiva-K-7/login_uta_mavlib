@@ -45,6 +45,7 @@
     <string name="quantity">Quantity</string>
     <string name="notification">Notification</string>
     <string name="book_results">Book Results</string>
+    <string name="book_image">BookImage</string>
 
 
 </resources>

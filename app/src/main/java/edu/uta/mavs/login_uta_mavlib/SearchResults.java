@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,15 +20,7 @@ public class SearchResults extends AppCompatActivity {
 
     String SearchResultsLog = "SearchResults Log" ;
 
-    //ListView bookResults;
-    //ArrayList<String> returnedBookResults = new ArrayList<>();
-    ArrayList<Book> returnedBookResults = new ArrayList<>();
-
     List<Map<String, String>> bookResultsTitleAndAuthor = new ArrayList<Map<String, String>>();
-    DBMgr searchBooksDBManager ;
-
-    //Book myBook = new Book("1234893234", "Design Patterns", "David Kung", "software", 4);
-    //Book myBook2 = new Book( "12348933234", "Call of the Wild", "Jack London", "fiction", 5 );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +38,11 @@ public class SearchResults extends AppCompatActivity {
 
         for( int i = 0; i < returnedBookResults.size( ); i++ )
         {
-            Map< String, String > bookMap = new HashMap< String, String >( );
+            Map< String, String > bookMap = new HashMap< >();
             Book thisBook = returnedBookResults.get( i ) ;
 
-            bookMap.put( TEXT1, thisBook.getTitle( ) ) ;
-            bookMap.put( TEXT2, thisBook.getAuthor( ) ) ;
+            bookMap.put( TEXT1, thisBook.getTitle( ).toUpperCase( ) ) ;
+            bookMap.put( TEXT2, thisBook.getAuthor( ).toUpperCase( ) ) ;
             bookResultsTitleAndAuthor.add( bookMap ) ;
         }
 
@@ -61,33 +52,22 @@ public class SearchResults extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, bookResultsTitleAndAuthor, android.R.layout.simple_list_item_2,
                 mapKey, layoutID ) ;
 
-        final ListView bookResults =  findViewById(R.id.list_searched_books);
+        final ListView bookResults = findViewById(R.id.list_searched_books);
         bookResults.setAdapter(simpleAdapter);
 
         bookResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
-               // Object clickItemObj = adapterView.getAdapter().getItem(index);
-               // Toast.makeText(SearchResults.this, "You clicked " + clickItemObj.toString(), Toast.LENGTH_SHORT).show();
-                Intent intent =  new Intent(SearchResults.this,ViewBook.class);
-                Book returned_Book = returnedBookResults.get(index);
-                intent.putExtra("returned_book", returned_Book);
+                Object clickItemObj = adapterView.getAdapter().getItem(index);
+
+                Book myBook = returnedBookResults.get( index ) ;
+
+                Intent intent = new Intent(SearchResults.this, ViewBook.class);
+                Bundle args = new Bundle();
+                args.putSerializable("resultsIntent", myBook );
+                intent.putExtra("BUNDLE", args);
                 startActivity(intent);
             }
         });
-
-
-        /*
-        final Button search = findViewById(R.id.view_book1);
-        search.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(SearchResults.this,ViewBook.class);
-                startActivity(i);
-                //setContentView(R.layout.activity_add_book);
-            }
-        });
-        */
-
     }
 }

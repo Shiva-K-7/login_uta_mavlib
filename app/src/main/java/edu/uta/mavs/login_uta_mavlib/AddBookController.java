@@ -34,10 +34,10 @@ public class AddBookController extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                final String ISBN = isbn.getText().toString().trim();
-                final String TITLE = title.getText().toString().trim();
-                final String AUTHOR = author.getText().toString().trim();
-                final String CATEGORY = category.getText().toString().trim();
+                final String ISBN = isbn.getText().toString().trim().toLowerCase();
+                final String TITLE = title.getText().toString().trim().toLowerCase();
+                final String AUTHOR = author.getText().toString().trim().toLowerCase();
+                final String CATEGORY = category.getText().toString().trim().toLowerCase();
                 final String TOTAL = total.getText().toString().trim();
                 int totalBooks = 0;
 

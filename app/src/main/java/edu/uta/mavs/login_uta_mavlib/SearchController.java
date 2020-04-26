@@ -38,10 +38,10 @@ public class SearchController extends AppCompatActivity {
 
                 DBMgr searchBooksDBMgr = DBMgr.getInstance();
 
-                String myISBN = input_ISBN.getText().toString();
-                String myTitle = input_title.getText().toString();
-                String myAuthor = input_author.getText().toString();
-                String myCategory = input_category.getText().toString();
+                String myISBN = input_ISBN.getText().toString().toLowerCase();
+                String myTitle = input_title.getText().toString().toLowerCase();
+                String myAuthor = input_author.getText().toString().toLowerCase();
+                String myCategory = input_category.getText().toString().toLowerCase();
 
                 final ArrayList< Book > booksResult = new ArrayList< >( );
 
@@ -210,7 +210,6 @@ public class SearchController extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
     }
