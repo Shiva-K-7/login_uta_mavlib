@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class SearchResults extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
-        ArrayList<Book> returnedBookResults = (ArrayList<Book>) args.getSerializable("searchIntent");
+        final ArrayList<Book> returnedBookResults = (ArrayList<Book>) args.getSerializable("searchIntent");
 
         Log.i(SearchResultsLog, "Starting Display of Search Results");
 
@@ -60,14 +61,18 @@ public class SearchResults extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, bookResultsTitleAndAuthor, android.R.layout.simple_list_item_2,
                 mapKey, layoutID ) ;
 
-        ListView bookResults = (ListView) findViewById(R.id.list_searched_books);
+        final ListView bookResults =  findViewById(R.id.list_searched_books);
         bookResults.setAdapter(simpleAdapter);
 
         bookResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
-                Object clickItemObj = adapterView.getAdapter().getItem(index);
-                Toast.makeText(SearchResults.this, "You clicked " + clickItemObj.toString(), Toast.LENGTH_SHORT).show();
+               // Object clickItemObj = adapterView.getAdapter().getItem(index);
+               // Toast.makeText(SearchResults.this, "You clicked " + clickItemObj.toString(), Toast.LENGTH_SHORT).show();
+                Intent intent =  new Intent(SearchResults.this,ViewBook.class);
+                Book returned_Book = returnedBookResults.get(index);
+                intent.putExtra("returned_book", returned_Book);
+                startActivity(intent);
             }
         });
 
