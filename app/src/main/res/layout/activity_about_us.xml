@@ -51,6 +51,7 @@
 
             <TextView
                 android:id="@+id/Joel_Text"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -66,6 +67,7 @@
 
             <TextView
                 android:id="@+id/Shiva_Text"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,10 +82,25 @@
 
             <TextView
                 android:id="@+id/Jacob_Text"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/Jacob" />
+            <ImageView
+                android:id="@+id/Vimlendra_Image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/Vimlendra"
+                app:srcCompat="@mipmap/vimlendra_foreground" />
+
+            <TextView
+                android:id="@+id/Vimlendra_Text"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Vimlendra" />
 
             <ImageView
                 android:id="@+id/Ajinkya_Image"
@@ -95,6 +112,7 @@
 
             <TextView
                 android:id="@+id/Ajinkya_Text"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,24 +127,13 @@
 
             <TextView
                 android:id="@+id/Rajat_Text"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/Rajat" />
 
-            <ImageView
-                android:id="@+id/Vimlendra_Image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/Vimlendra"
-                app:srcCompat="@mipmap/vimlendra_foreground" />
 
-            <TextView
-                android:id="@+id/Vimlendra_Text"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Vimlendra" />
         </LinearLayout>
     </ScrollView>
 
