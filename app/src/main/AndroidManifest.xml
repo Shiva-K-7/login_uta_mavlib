@@ -15,7 +15,7 @@
             android:parentActivityName=".SearchController" />
         <activity android:name=".SearchResults"
             android:parentActivityName=".SearchController" />
-        <activity android:name=".ReservedBooks"
+        <activity android:name=".ViewReservedCheckedoutController"
             android:parentActivityName=".StudentMenu" />
         <activity android:name=".DeleteBookController"
             android:parentActivityName=".ManageBooks" />

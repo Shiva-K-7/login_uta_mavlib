@@ -45,7 +45,7 @@ public class NotificationGenerator {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
-        Intent resultIntent = new Intent(context, ReservedBooks.class);
+        Intent resultIntent = new Intent(context, ViewReservedCheckedoutController.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(resultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

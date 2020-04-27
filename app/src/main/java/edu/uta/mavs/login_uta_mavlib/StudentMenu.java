@@ -36,7 +36,7 @@ public class StudentMenu extends AppCompatActivity {
         view_res_or_cout_books.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i3=new Intent(StudentMenu.this,ReservedBooks.class);
+                Intent i3=new Intent(StudentMenu.this, ViewReservedCheckedoutController.class);
                 startActivity(i3);
             }
         });
