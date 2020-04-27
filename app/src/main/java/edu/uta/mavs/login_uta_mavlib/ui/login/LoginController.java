@@ -76,7 +76,7 @@ public class LoginController extends AppCompatActivity {
                     return;
                 }
 
-                String password_encrypted = password_security.getMD5EncryptedValue(pass);
+                final String password_encrypted = password_security.getMD5EncryptedValue(pass);
 
                 dbMgr.login(em, password_encrypted, LoginController.this);
 

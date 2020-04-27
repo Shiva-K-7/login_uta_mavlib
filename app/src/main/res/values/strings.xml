@@ -22,7 +22,7 @@
     <string name="checkout_books">Checkout Books</string>
     <string name="search_books">Search Books</string>
     <string name="view_reserved_or_checked_out_books">View Reserved/Checkedout Books</string>
-    <string name="about">About</string>
+    <string name="about">About MavLib</string>
     <string name="student_menu">Student Menu</string>
     <string name="splash_screen">Splash Screen</string>
     <string name="manage_books">Manage Books</string>
@@ -34,6 +34,7 @@
     <string name="isbn">ISBN</string>
     <string name="author">Author</string>
     <string name="book_title">Title</string>
+    <string name="book_image">book_image</string>
     <string name="category">Category</string>
     <string name="total">Total</string>
     <string name="delete_book">Delete Book</string>
@@ -45,7 +46,13 @@
     <string name="quantity">Quantity</string>
     <string name="notification">Notification</string>
     <string name="book_results">Book Results</string>
-    <string name="book_image">BookImage</string>
+    <string name="Joel">Joel</string>
+    <string name="Jacob">Jacob</string>
+    <string name="Shiva">Shiva</string>
+    <string name="Ajinkya">Ajinkya</string>
+    <string name="Vimlendra">Vimlendra</string>
+    <string name="Rajat">Rajat</string>
+
 
 
 </resources>
