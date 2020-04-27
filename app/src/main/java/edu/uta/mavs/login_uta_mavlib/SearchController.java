@@ -43,8 +43,6 @@ public class SearchController extends AppCompatActivity {
                 String myAuthor = input_author.getText().toString().toLowerCase();
                 String myCategory = input_category.getText().toString().toLowerCase();
 
-                final ArrayList< Book > booksResult = new ArrayList< >( );
-
                 String isbn = "isbn" ;
                 String title = "title" ;
                 String author = "author" ;

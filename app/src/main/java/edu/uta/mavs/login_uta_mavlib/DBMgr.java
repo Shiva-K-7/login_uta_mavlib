@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.uta.mavs.login_uta_mavlib.ui.login.LoginController;
 
@@ -397,6 +398,92 @@ public class DBMgr {
             public void onFailure(@NonNull Exception e) {
                 Log.d(TAG, e.toString());
                 listener.onFailure();
+            }
+        });
+    }
+
+
+    public void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
+    {
+        listener.onStart();
+
+        List< String > ISBNs = new ArrayList<>();
+
+        for ( int i = 0; i < inCheckouts.size( ); i++ )
+        {
+            ISBNs.add( inCheckouts.get(i).getIsbn( ) ) ;
+        }
+
+        bookDb.whereIn( "isbn", ISBNs )
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        ArrayList<Book> books = new ArrayList<Book>();
+                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
+                            Book book = docSnapshot.toObject(Book.class);
+                            books.add(book);
+                        }
+                        listener.onSuccess(books);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, e.toString());
+            }
+        });
+    }
+
+    public void getResAndCheckedoutBooks( final OnGetResAndCheckedoutBooks listener )
+    {
+        listener.onStart();
+
+        getCurrentUser(new OnGetUserListener() {
+            @Override
+            public void onSuccess(final User user) {
+                getCheckouts(null, user.getUserId(), new OnGetCheckoutsListener() {
+                    @Override
+                    public void onSuccess(final ArrayList<Checkout> checkouts) {
+                        buildCheckedoutBooksList(checkouts, new OnBuildCheckedoutBooksList() {
+                            @Override
+                            public void onSuccess(ArrayList<Book> userBooks) {
+                                listener.onSuccess( checkouts, userBooks );
+
+                            }
+
+                            @Override
+                            public void onStart() {
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onFailure() {
+
             }
         });
     }
