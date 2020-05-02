@@ -39,16 +39,14 @@ public class DBMgr {
     private CollectionReference librarianDb;
     private CollectionReference bookDb;
     private CollectionReference checkoutDb;
-    private CollectionReference reservationDb;
 
-    public DBMgr() {
+    private DBMgr() {
         fAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         studentDb = database.collection("Student");
         librarianDb = database.collection("Librarian");
         bookDb = database.collection("Book");
         checkoutDb = database.collection("Checkout");
-        reservationDb = database.collection("Reservation");
     }
 
     //Singleton Database Manager
@@ -403,7 +401,7 @@ public class DBMgr {
     }
 
 
-    public void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
+    private void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
     {
         listener.onStart();
 
@@ -448,42 +446,28 @@ public class DBMgr {
                             @Override
                             public void onSuccess(ArrayList<Book> userBooks) {
                                 listener.onSuccess( checkouts, userBooks );
-
                             }
-
                             @Override
                             public void onStart() {
-
                             }
-
                             @Override
                             public void onFailure() {
-
                             }
                         });
                     }
-
                     @Override
                     public void onStart() {
-
                     }
-
                     @Override
                     public void onFailure() {
-
                     }
                 });
-
             }
-
             @Override
             public void onStart() {
-
             }
-
             @Override
             public void onFailure() {
-
             }
         });
     }
@@ -513,7 +497,7 @@ public class DBMgr {
     }
 
 
-    public void deleteBookCheckout(String aIsbn){
+    private void deleteBookCheckout(String aIsbn){
 
         checkoutDb.whereEqualTo("isbn", aIsbn).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
