@@ -49,12 +49,14 @@ public class DBMgr {
         checkoutDb = database.collection("Checkout");
     }
 
+
     //Singleton Database Manager
     public static DBMgr getInstance(){
         if (single_instance == null)
             single_instance = new DBMgr();
         return single_instance;
     }
+
 
     public void getLoggedInStatus(final Context aContext){
         FirebaseUser fUser = fAuth.getCurrentUser();
@@ -257,6 +259,7 @@ public class DBMgr {
         });
     }
 
+
     public void getBooks(String field1, String field2, String field3, String input1, String input2, String input3, final OnGetBooksListener listener){
         listener.onStart();
         bookDb.whereEqualTo( field1, input1 )
@@ -280,6 +283,7 @@ public class DBMgr {
         });
     }
 
+
     public void getBooks(String field1, String field2, String input1, String input2, final OnGetBooksListener listener){
         listener.onStart();
         bookDb.whereEqualTo( field1, input1)
@@ -301,6 +305,7 @@ public class DBMgr {
             }
         });
     }
+
 
     public void getBooks(String field1,  String input1, final OnGetBooksListener listener){
         listener.onStart();
@@ -401,36 +406,39 @@ public class DBMgr {
     }
 
 
-    public void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
+    private void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
     {
         listener.onStart();
 
-        List< String > ISBNs = new ArrayList<>();
+        if( inCheckouts.size( ) > 0 ) {
 
-        for ( int i = 0; i < inCheckouts.size( ); i++ )
-        {
-            ISBNs.add( inCheckouts.get(i).getIsbn( ) ) ;
-        }
+            List<String> ISBNs = new ArrayList<>();
 
-        bookDb.whereIn( "isbn", ISBNs )
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        ArrayList<Book> books = new ArrayList<Book>();
-                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            Book book = docSnapshot.toObject(Book.class);
-                            books.add(book);
-                        }
-                        listener.onSuccess(books);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
+            for (int i = 0; i < inCheckouts.size(); i++) {
+                ISBNs.add(inCheckouts.get(i).getIsbn());
             }
-        });
+
+            bookDb.whereIn("isbn", ISBNs)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            ArrayList<Book> books = new ArrayList<Book>();
+                            for (QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots) {
+                                Book book = docSnapshot.toObject(Book.class);
+                                books.add(book);
+                            }
+                            listener.onSuccess(books);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, e.toString());
+                }
+            });
+        }
     }
+
 
     public void getResAndCheckedoutBooks( final OnGetResAndCheckedoutBooks listener )
     {
@@ -468,6 +476,8 @@ public class DBMgr {
             }
             @Override
             public void onFailure() {
+
+                Log.i("Jacob", "getResAndCheckedoutBooks Failure") ;
             }
         });
     }
@@ -540,6 +550,5 @@ public class DBMgr {
                     }
                 });
     }
-
 
 }
