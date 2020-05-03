@@ -41,13 +41,24 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/about_us_content"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/about_us_content"
+                android:visibility="visible" />
+
             <ImageView
                 android:id="@+id/Joel_Image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/Joel"
                 android:visibility="visible"
-                app:srcCompat="@mipmap/joel_foreground" />
+                app:srcCompat="@mipmap/joel_foreground"
+
+                />
 
             <TextView
                 android:id="@+id/Joel_Text"

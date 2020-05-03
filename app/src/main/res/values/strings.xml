@@ -46,13 +46,18 @@
     <string name="quantity">Quantity</string>
     <string name="notification">Notification</string>
     <string name="book_results">Book Results</string>
-    <string name="Joel">Joel</string>
-    <string name="Jacob">Jacob</string>
-    <string name="Shiva">Shiva</string>
-    <string name="Ajinkya">Ajinkya</string>
-    <string name="Vimlendra">Vimlendra</string>
-    <string name="Rajat">Rajat</string>
-
+    <string name="Joel">Joel Friberg</string>
+    <string name="Jacob">Jacob Sollner</string>
+    <string name="Shiva">Shiva Katukoori</string>
+    <string name="Ajinkya">Ajinkya Salvi</string>
+    <string name="Vimlendra">Vimlendra Bouddh</string>
+    <string name="Rajat">Rajat Chaudhary</string>
+    <string name="about_us_content">MavLib is an app that will allow students and librarians to utilize library features from the convenience of an Android app.
+        \n\n
+        We hope that this app would be very useful as students can reserve books at ease in times like this(COVID-19) where people have to limit direct interaction.
+        \n\n
+        App Developers
+    </string>
 
 
 </resources>
