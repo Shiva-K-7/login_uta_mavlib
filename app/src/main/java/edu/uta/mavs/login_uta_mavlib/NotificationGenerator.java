@@ -39,7 +39,7 @@ public class NotificationGenerator {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher_uta_round)
                 .setContentTitle("Books Due")
                 .setContentText("You have books due at the library tomorrow!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
