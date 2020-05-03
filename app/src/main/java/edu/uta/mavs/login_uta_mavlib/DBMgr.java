@@ -39,17 +39,16 @@ public class DBMgr {
     private CollectionReference librarianDb;
     private CollectionReference bookDb;
     private CollectionReference checkoutDb;
-    private CollectionReference reservationDb;
 
-    public DBMgr() {
+    private DBMgr() {
         fAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         studentDb = database.collection("Student");
         librarianDb = database.collection("Librarian");
         bookDb = database.collection("Book");
         checkoutDb = database.collection("Checkout");
-        reservationDb = database.collection("Reservation");
     }
+
 
     //Singleton Database Manager
     public static DBMgr getInstance(){
@@ -57,6 +56,7 @@ public class DBMgr {
             single_instance = new DBMgr();
         return single_instance;
     }
+
 
     public void getLoggedInStatus(final Context aContext){
         FirebaseUser fUser = fAuth.getCurrentUser();
@@ -259,6 +259,7 @@ public class DBMgr {
         });
     }
 
+
     public void getBooks(String field1, String field2, String field3, String input1, String input2, String input3, final OnGetBooksListener listener){
         listener.onStart();
         bookDb.whereEqualTo( field1, input1 )
@@ -282,6 +283,7 @@ public class DBMgr {
         });
     }
 
+
     public void getBooks(String field1, String field2, String input1, String input2, final OnGetBooksListener listener){
         listener.onStart();
         bookDb.whereEqualTo( field1, input1)
@@ -303,6 +305,7 @@ public class DBMgr {
             }
         });
     }
+
 
     public void getBooks(String field1,  String input1, final OnGetBooksListener listener){
         listener.onStart();
@@ -403,36 +406,39 @@ public class DBMgr {
     }
 
 
-    public void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
+    private void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
     {
         listener.onStart();
 
-        List< String > ISBNs = new ArrayList<>();
+        if( inCheckouts.size( ) > 0 ) {
 
-        for ( int i = 0; i < inCheckouts.size( ); i++ )
-        {
-            ISBNs.add( inCheckouts.get(i).getIsbn( ) ) ;
-        }
+            List<String> ISBNs = new ArrayList<>();
 
-        bookDb.whereIn( "isbn", ISBNs )
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        ArrayList<Book> books = new ArrayList<Book>();
-                        for(QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots){
-                            Book book = docSnapshot.toObject(Book.class);
-                            books.add(book);
-                        }
-                        listener.onSuccess(books);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, e.toString());
+            for (int i = 0; i < inCheckouts.size(); i++) {
+                ISBNs.add(inCheckouts.get(i).getIsbn());
             }
-        });
+
+            bookDb.whereIn("isbn", ISBNs)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            ArrayList<Book> books = new ArrayList<Book>();
+                            for (QueryDocumentSnapshot docSnapshot : queryDocumentSnapshots) {
+                                Book book = docSnapshot.toObject(Book.class);
+                                books.add(book);
+                            }
+                            listener.onSuccess(books);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, e.toString());
+                }
+            });
+        }
     }
+
 
     public void getResAndCheckedoutBooks( final OnGetResAndCheckedoutBooks listener )
     {
@@ -448,42 +454,30 @@ public class DBMgr {
                             @Override
                             public void onSuccess(ArrayList<Book> userBooks) {
                                 listener.onSuccess( checkouts, userBooks );
-
                             }
-
                             @Override
                             public void onStart() {
-
                             }
-
                             @Override
                             public void onFailure() {
-
                             }
                         });
                     }
-
                     @Override
                     public void onStart() {
-
                     }
-
                     @Override
                     public void onFailure() {
-
                     }
                 });
-
             }
-
             @Override
             public void onStart() {
-
             }
-
             @Override
             public void onFailure() {
 
+                Log.i("Jacob", "getResAndCheckedoutBooks Failure") ;
             }
         });
     }
@@ -513,7 +507,7 @@ public class DBMgr {
     }
 
 
-    public void deleteBookCheckout(String aIsbn){
+    private void deleteBookCheckout(String aIsbn){
 
         checkoutDb.whereEqualTo("isbn", aIsbn).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -556,6 +550,5 @@ public class DBMgr {
                     }
                 });
     }
-
 
 }

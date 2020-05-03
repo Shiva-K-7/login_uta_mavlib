@@ -23,6 +23,7 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
 
         final ArrayList< Book > reservedBooks = new ArrayList<>();
         final ArrayList< Book > checkedoutBooks = new ArrayList<>();
+        final ArrayList< String > dueDates = new ArrayList<>();
 
         Log.i( viewResAndCheckedoutBooksControllerLog, "Building list of books");
 
@@ -31,6 +32,7 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
         dbMgr.getResAndCheckedoutBooks(new OnGetResAndCheckedoutBooks() {
             @Override
             public void onSuccess(ArrayList<Checkout> checkouts, ArrayList<Book> userBooks ) {
+
                 for( int i = 0; i < checkouts.size( ); i++ )
                 {
                     if( checkouts.get(i).getDueDate().isEmpty())
@@ -40,6 +42,7 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
                     else
                     {
                         checkedoutBooks.add( userBooks.get(i));
+                        dueDates.add( checkouts.get(i).getDueDate());
                     }
                 }
 
@@ -66,8 +69,8 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
                     Map< String, String > bookMap = new HashMap< >();
                     Book thisBook = checkedoutBooks.get( i ) ;
 
-                    bookMap.put( chckoutTitleKey, thisBook.getTitle( ).toUpperCase( ) ) ;
-                    bookMap.put( chckoutAuthorKey, thisBook.getAuthor( ).toUpperCase( ) ) ;
+                    bookMap.put( chckoutTitleKey, thisBook.getTitle( ).toUpperCase( ) + " - " + thisBook.getAuthor( ).toUpperCase( ) ) ;
+                    bookMap.put( chckoutAuthorKey, "Book due: " + dueDates.get( i ) ) ;
                     checkedoutTitleAndAuthor.add( bookMap ) ;
                 }
 
