@@ -401,7 +401,7 @@ public class DBMgr {
     }
 
 
-    private void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
+    public void buildCheckedoutBooksList( ArrayList< Checkout > inCheckouts, final OnBuildCheckedoutBooksList listener )
     {
         listener.onStart();
 
