@@ -24,6 +24,7 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
         final ArrayList< Book > reservedBooks = new ArrayList<>();
         final ArrayList< Book > checkedoutBooks = new ArrayList<>();
         final ArrayList< String > dueDates = new ArrayList<>();
+        final ArrayList< String > pickDates = new ArrayList<>();
 
         Log.i( viewResAndCheckedoutBooksControllerLog, "Building list of books");
 
@@ -38,6 +39,7 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
                     if( checkouts.get(i).getDueDate().isEmpty())
                     {
                         reservedBooks.add( userBooks.get(i));
+                        pickDates.add(checkouts.get(i).getAvailableDate());
                     }
                     else
                     {
@@ -59,8 +61,8 @@ public class ViewReservedCheckedoutController extends AppCompatActivity {
                     Map< String, String > bookMap = new HashMap< >();
                     Book thisBook = reservedBooks.get( i ) ;
 
-                    bookMap.put( resTitleKey, thisBook.getTitle( ).toUpperCase( ) ) ;
-                    bookMap.put( resAuthKey, thisBook.getAuthor( ).toUpperCase( ) ) ;
+                    bookMap.put( resTitleKey, thisBook.getTitle( ).toUpperCase( ) + " - " + thisBook.getAuthor( ).toUpperCase( ) ) ;
+                    bookMap.put( resAuthKey, "Book available: " + pickDates.get(i) ) ;
                     resTitleAndAuthor.add( bookMap ) ;
                 }
 
